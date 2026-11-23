@@ -2,7 +2,7 @@
 
 ## Wat zit erin (versie 1.0)
 
-- Startscherm met 8 hoofdstukwerelden. H1 "Hoe welvarend ben jij?" is speelbaar, de rest komt per hoofdstuk.
+- Startscherm met 8 hoofdstukwerelden (H1 t/m H8), allemaal speelbaar, plus de Eindexamentrainer met 183 meerkeuzevragen (2018-2026) per examen, per domein, als sprint en om te printen.
 - Per paragraaf een level van 8 vragen (meerkeuze, waar/niet waar, koppelen, rekenen met steeds nieuwe getallen).
   Medailles: brons 6/8, zilver 7/8, goud 8/8. Het volgende level gaat open bij brons.
 - Eindtoets per hoofdstuk (15 vragen) zonder cijfer: de leerling ziet hoeveel goed en wat nog geoefend moet worden,

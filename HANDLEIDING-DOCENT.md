@@ -10,8 +10,14 @@
 - Vaardigheden: score 0–100 per eindterm en domein (Consumptie, Arbeid en productie, Overheid, Internationaal, Rekenen).
 - Herhaalronde: foute vragen komen terug tot ze twee keer goed zijn gemaakt.
 - Collectie: begrippenkaarten, badges, munten en kleurthema's.
-- Docentenscherm (tegel "Docent"): ranglijst op oefentijd (deze week of totaal), voortgang, scores per domein,
-  top 5 vaakst fout gemaakte vragen, klasgemiddelde per eindterm, speler-ID en herstelcode per leerling.
+- Docentendashboard (tegel "Docent", haalt alles live op uit je Google Sheet via de server):
+  - Overzicht: kerncijfers, oefentijd per week en per dag, scores per domein, voortgang per wereld, en wie aandacht nodig heeft.
+  - Leerlingen: sorteerbare tabel. Klik op een naam voor alles van die leerling: oefentijd, medailles per level,
+    eindtoetsen, scores per eindterm, de vragen die het vaakst fout gingen en de examentrainer per examen.
+  - Vragen: de moeilijkste vragen van de groep (percentage fout), per wereld te filteren, plus de rekensommen.
+  - Eindtermen: kleurentabel van alle leerlingen per eindterm, en de eindtermen van zwak naar sterk.
+  - Examentrainer: per leerling en per examen hoeveel vragen beheerst zijn, en het sprintrecord.
+  - Filter op Econ1 of Econ2, vernieuwen, CSV voor Excel en afdrukken.
 
 ## Zo raakt er niets kwijt
 

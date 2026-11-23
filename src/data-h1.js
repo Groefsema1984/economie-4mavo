@@ -1,0 +1,113 @@
+// ===== Hoofdstuk 1: Hoe welvarend ben jij? (bron: 01_KADER_MAVO_4_PINCODE_H1_LESSTOF) =====
+// Vraagvormen: mc (meerkeuze), wo (waar/onwaar), koppel (paren), reken (getal invullen)
+// e = eindterm, b = begrippenkaart die je verdient bij een goed antwoord
+const BEGRIPPEN_H1 = {
+  'A-merk':'Bekend merk met landelijke reclame, hoge kwaliteit en overal te koop. Duurder.',
+  'B-merk':'Minder bekend merk met weinig of geen reclame. Goedkoper dan een A-merk.',
+  'Basisbehoefte':'Wat je nodig hebt om te overleven: voeding, kleding, onderdak en medische zorg.',
+  'Begroting':'Overzicht van alle verwachte inkomsten en uitgaven. Maak je altijd vooraf.',
+  'Budget':'Het totale bedrag dat je in een bepaalde periode kunt uitgeven.',
+  'Budgetteren':'Je inkomsten en uitgaven op elkaar afstemmen.',
+  'CBS':'Centraal Bureau voor de Statistiek. Meet onder andere de inflatie.',
+  'Commerciële invloed':'Beïnvloeding door bedrijven en winkeliers om meer te verkopen.',
+  'Commerciële reclame':'Reclame om meer te verkopen en winst te maken.',
+  'Consumeren':'Goederen en diensten kopen en gebruiken om in je behoeften te voorzien.',
+  'Dagelijkse uitgaven':'Uitgaven voor het dagelijks huishouden, zoals boodschappen.',
+  'Deflatie':'Een algemene daling van het gemiddelde prijspeil.',
+  'Diensten':'Niet-tastbare werkzaamheden die iemand voor je doet, zoals de kapper.',
+  'Doelgroep':'De groep consumenten waarop een bedrijf zich richt.',
+  'Gebruiksgoederen':'Goederen die je vaker gebruikt en die lang meegaan.',
+  'Goederen':'Tastbare producten die je vast kunt pakken.',
+  'Huismerk':'Eigen merk van een winkelketen. Voordelig en alleen daar te koop.',
+  'Ideële reclame':'Reclame om gedrag of meningen te veranderen voor een maatschappelijk doel.',
+  'Incidentele uitgaven':'Grote, onregelmatige of onverwachte uitgaven.',
+  'Indexcijfer':'Getal dat een verhouding laat zien ten opzichte van een basisjaar (= 100).',
+  'Inflatie':'Algemene stijging van het prijspeil. Je geld wordt minder waard.',
+  'Informatieve reclame':'Reclame met feitelijke informatie over het product of de prijs.',
+  'Inkomen in natura':'Beloning in goederen of diensten in plaats van geld.',
+  'Inkomen uit arbeid':'Beloning voor werk: loon, salaris, winst, fooi.',
+  'Inkomen uit bezit':'Beloning voor vermogen of eigendom: rente, huur, dividend, pacht.',
+  'Koopkracht':'De hoeveelheid goederen en diensten die je met je inkomen kunt kopen.',
+  'Marketingmix':'De 6 P\'s: product, prijs, plaats, promotie, personeel, presentatie.',
+  'Merkreclame':'Reclame gericht op naamsbekendheid en een positief imago.',
+  'Nibud':'Nationaal Instituut voor Budgetvoorlichting. Geeft advies over geldzaken.',
+  'Nominaal inkomen':'Je inkomen in euro\'s, zoals op je loonstrook.',
+  'Overdrachtsinkomen':'Inkomen zonder directe tegenprestatie: uitkering, toeslag, zakgeld.',
+  'Overige behoeften':'Wensen die het leven prettiger of luxer maken (secundaire behoeften).',
+  'Prioriteiten stellen':'Bepalen welke behoeften voorrang krijgen.',
+  'Reëel inkomen':'Je inkomen gecorrigeerd voor inflatie: wat je er echt voor kunt kopen.',
+  'Reserveren':'Elke maand doelgericht sparen voor een grote uitgave later.',
+  'Schaarste':'Je behoeften zijn groter dan je middelen (geld en tijd). Je moet kiezen.',
+  'Sociale invloed':'Invloed van familie, vrienden en trends op wat je koopt.',
+  'Vaste lasten':'Regelmatig terugkerende uitgaven waar je via een contract aan vastzit.',
+  'Verbruiksgoederen':'Goederen die opraken als je ze gebruikt, zoals voedsel.',
+  'Vrije goederen':'Goederen die zonder productiemiddelen in de natuur beschikbaar zijn.',
+  'Welvaart':'De mate waarin je met je middelen in je behoeften kunt voorzien.',
+  'Zelfvoorziening':'Zelf goederen maken of diensten doen voor eigen gebruik.'
+};
+
+LEVELS.h1 = [
+ {id:'h1.0', naam:'Weet je het nog?', kort:'Basisbegrippen', vragen:[
+  {id:'h1.0.01', t:'mc', e:'4A.1', b:'Basisbehoefte', q:'Welke behoefte is een basisbehoefte (primaire behoefte)?', o:['Onderdak','Een nieuwe telefoon','Een vakantie','Een streamingabonnement'], a:0, u:'Basisbehoeften heb je nodig om te overleven: voeding, kleding, onderdak en medische zorg.'},
+  {id:'h1.0.02', t:'mc', e:'4A.1', b:'Diensten', q:'Welke van deze is een dienst?', o:['Een knipbeurt bij de kapper','Een fiets','Een brood','Een trui'], a:0, u:'Een dienst is niet tastbaar: iemand doet iets voor je.'},
+  {id:'h1.0.03', t:'koppel', e:'4A.1', q:'Koppel het begrip aan het voorbeeld.', p:[['Gebruiksgoed','Een wasmachine'],['Verbruiksgoed','Benzine'],['Dienst','Een treinreis'],['Zelfvoorziening','Groente uit je eigen moestuin']], u:'Gebruiksgoederen gaan lang mee, verbruiksgoederen raken op, een dienst is niet tastbaar en bij zelfvoorziening maak je het zelf.'},
+  {id:'h1.0.04', t:'wo', e:'4A.1', b:'Verbruiksgoederen', q:'Brood is een verbruiksgoed.', a:true, u:'Brood raakt op als je het gebruikt. Dat is een verbruiksgoed.'},
+  {id:'h1.0.05', t:'wo', e:'4A.1', b:'Gebruiksgoederen', q:'Een laptop is een verbruiksgoed.', a:false, u:'Een laptop gebruik je vaak en gaat lang mee. Dat is een gebruiksgoed.'},
+  {id:'h1.0.06', t:'mc', e:'4A.3', b:'Sociale invloed', q:'Je koopt dezelfde sneakers als je vrienden. Welke invloed is dit?', o:['Sociale invloed','Commerciële invloed','Ideële reclame','Zelfvoorziening'], a:0, u:'Invloed van vrienden, familie en trends heet sociale invloed.'},
+  {id:'h1.0.07', t:'mc', e:'4A.3', b:'Commerciële invloed', q:'Een winkel zet snoep bij de kassa zodat je het meeneemt. Welke invloed is dit?', o:['Commerciële invloed','Sociale invloed','Zelfvoorziening','Prioriteiten stellen'], a:0, u:'Bedrijven en winkeliers die je verleiden om te kopen: commerciële invloed.'},
+  {id:'h1.0.08', t:'mc', e:'4A.6', b:'Budget', q:'Wat is een budget?', o:['Het totale bedrag dat je in een periode kunt uitgeven','Een lijst van alles wat je wilt kopen','Het geld dat je spaart voor later','Een korting in de winkel'], a:0, u:'Je budget is het bedrag dat je in een bepaalde periode te besteden hebt.'},
+  {id:'h1.0.09', t:'mc', e:'4A.1', b:'Consumeren', q:'Wat betekent consumeren?', o:['Goederen en diensten kopen en gebruiken','Goederen maken in een fabriek','Geld sparen op een rekening','Reclame maken voor een product'], a:0, u:'Consumeren is kopen en gebruiken om in je behoeften te voorzien.'},
+  {id:'h1.0.10', t:'wo', e:'4A.1', b:'Goederen', q:'Goederen zijn tastbaar: je kunt ze vastpakken.', a:true, u:'Goederen zijn tastbaar, diensten niet.'},
+  {id:'h1.0.11', t:'mc', e:'4A.1', b:'Zelfvoorziening', q:'Je oma breit zelf een sjaal voor jou. Hoe heet dit?', o:['Zelfvoorziening','Consumeren','Een dienst','Inkomen in natura'], a:0, u:'Zelf iets maken voor eigen gebruik, zonder geld, heet zelfvoorziening.'}
+ ]},
+ {id:'h1.1', naam:'1.1 Kun jij kopen wat je wilt?', kort:'Schaarste en welvaart', vragen:[
+  {id:'h1.1.01', t:'mc', e:'4A.1', b:'Schaarste', q:'Wat betekent schaarste in de economie?', o:['Je behoeften zijn groter dan je middelen','Er zijn geen producten meer in de winkel','Iets is heel duur','Je hebt helemaal geen geld'], a:0, u:'Schaarste: oneindige behoeften tegenover beperkte middelen (geld en tijd). Daardoor moet je kiezen.'},
+  {id:'h1.1.02', t:'mc', e:'4A.1', b:'Vrije goederen', q:'Welk goed is een vrij goed?', o:['Zonlicht','Kraanwater','Een appel uit de supermarkt','Stroom'], a:0, u:'Vrije goederen zijn er zonder productiemiddelen, zoals zonlicht, wind en buitenlucht. Kraanwater moet gezuiverd en vervoerd worden: schaars.'},
+  {id:'h1.1.03', t:'wo', e:'4A.1', q:'Kraanwater is een vrij goed, want het komt gewoon uit de kraan.', a:false, u:'Voor kraanwater zijn productiemiddelen nodig (zuivering, leidingen). Het is dus een schaars goed.'},
+  {id:'h1.1.04', t:'mc', e:'4A.1', b:'Prioriteiten stellen', q:'Je hebt € 50 en wilt een spel, kleding én een concertkaartje. Wat moet je doen?', o:['Prioriteiten stellen','Zelfvoorziening toepassen','Reserveren','Inkomen in natura vragen'], a:0, u:'Door schaarste moet je kiezen wat voorrang krijgt: prioriteiten stellen.'},
+  {id:'h1.1.05', t:'mc', e:'4A.1', b:'Welvaart', q:'Wat is welvaart?', o:['De mate waarin je met je middelen in je behoeften kunt voorzien','Hoeveel geld je op je spaarrekening hebt','Hoe gelukkig je bent','Hoeveel spullen een land maakt'], a:0, u:'Welvaart gaat over hoe goed je met je beschikbare middelen in je behoeften kunt voorzien.'},
+  {id:'h1.1.06', t:'mc', e:'4A.1', q:'Waardoor stijgt je welvaart?', o:['Je koopkracht wordt hoger','De prijzen stijgen harder dan je loon','Je moet meer prioriteiten stellen','Je behoeften worden groter'], a:0, u:'Welvaart stijgt bij hogere koopkracht, meer productie of meer zelfvoorziening.'},
+  {id:'h1.1.07', t:'koppel', e:'4A.1', q:'Primaire of secundaire behoefte?', p:[['Voedsel','Primaire behoefte'],['Medische zorg','Primaire behoefte'],['Een spelcomputer','Secundaire behoefte'],['Een vakantie','Secundaire behoefte']], u:'Primair = nodig om te overleven. Secundair = maakt het leven prettiger of luxer.'},
+  {id:'h1.1.08', t:'wo', e:'4A.1', b:'Overige behoeften', q:'Wat vroeger luxe was, kan nu als noodzaak voelen, zoals een smartphone.', a:true, u:'Secundaire behoeften veranderen in de tijd. Een smartphone was luxe, nu voelt het voor veel mensen als noodzaak.'},
+  {id:'h1.1.09', t:'mc', e:'4A.1', q:'Welke middelen zijn nodig om schaarse goederen te maken?', o:['Productiemiddelen zoals grondstoffen, arbeid en machines','Alleen zonlicht en wind','Alleen geld van de overheid','Niets, ze zijn er vanzelf'], a:0, u:'Voor schaarse goederen zijn productiemiddelen nodig: grondstoffen, arbeid, machines en geld.'},
+  {id:'h1.1.10', t:'mc', e:'K3.r', q:'Hoe bereken je het snelst 8% van € 250?', o:['Eerst 250 : 100 = 2,50 (1%), dan × 8','250 × 8','250 : 8','250 − 8'], a:0, u:'Altijd eerst 1% bepalen (delen door 100), dan keer het percentage: 2,50 × 8 = € 20,00.'}
+ ], gens:['pctVan']},
+ {id:'h1.2', naam:'1.2 Hoe word je beïnvloed?', kort:'Marketing en reclame', vragen:[
+  {id:'h1.2.01', t:'koppel', e:'4A.3', b:'Marketingmix', q:'Koppel de P van de marketingmix aan het voorbeeld.', p:[['Product','Twee jaar garantie op een koptelefoon'],['Prijs','Tweede artikel halve prijs'],['Plaats','Ook te koop in de webshop'],['Promotie','Een reclame op TikTok'],['Presentatie','Dure merken op ooghoogte in het schap']], u:'De 6 P\'s: product, prijs, plaats, promotie, personeel en presentatie.'},
+  {id:'h1.2.02', t:'mc', e:'4A.3', q:'Een verkoper geeft je goed advies en is erg vriendelijk. Welke P is dit?', o:['Personeel','Presentatie','Promotie','Product'], a:0, u:'Kennis en klantvriendelijkheid van medewerkers hoort bij personeelsbeleid.'},
+  {id:'h1.2.03', t:'mc', e:'4A.3', b:'Ideële reclame', q:'Een reclame van KiKa vraagt je te doneren voor kinderen met kanker. Welke soort reclame is dit?', o:['Ideële reclame','Merkreclame','Informatieve reclame','Commerciële reclame'], a:0, u:'Ideële reclame wil gedrag of meningen veranderen voor een maatschappelijk doel, zonder winstoogmerk.'},
+  {id:'h1.2.04', t:'mc', e:'4A.3', b:'Informatieve reclame', q:'Een folder zegt: "Deze laptop heeft 16 GB geheugen en kost € 599." Welke soort reclame is dit?', o:['Informatieve reclame','Merkreclame','Ideële reclame','Sociale invloed'], a:0, u:'Feitelijke kenmerken en de prijs: informatieve reclame.'},
+  {id:'h1.2.05', t:'mc', e:'4A.3', b:'Merkreclame', q:'Een reclame laat alleen een logo en blije sporters zien, zonder prijs. Welke soort reclame is dit?', o:['Merkreclame','Informatieve reclame','Ideële reclame','Presentatiebeleid'], a:0, u:'Merkreclame gaat om naamsbekendheid, een goed gevoel en het imago.'},
+  {id:'h1.2.06', t:'mc', e:'4A.3', b:'Doelgroep', q:'Waarom zijn jongeren een belangrijke doelgroep voor bedrijven?', o:['Ze hebben veel vrij besteedbaar inkomen, want ze hebben nog geen vaste lasten','Ze verdienen meer dan volwassenen','Ze kopen alleen A-merken','Ze kijken nooit naar de prijs'], a:0, u:'Drie examenredenen: veel vrij besteedbaar inkomen, invloed op gezinsaankopen en merktrouw voor later.'},
+  {id:'h1.2.07', t:'wo', e:'4A.3', q:'Wie als jongere fan wordt van een merk, blijft als volwassene vaak klant. Daarom richten bedrijven zich op jongeren.', a:true, u:'Dat heet merktrouw voor de toekomst. Het is een van de drie examenredenen.'},
+  {id:'h1.2.08', t:'koppel', e:'4A.3', q:'Koppel het merk aan de omschrijving.', p:[['A-merk','Bekend, veel reclame, overal te koop, duurder'],['B-merk','Minder bekend, weinig reclame, goedkoper'],['Huismerk','Eigen merk van de supermarkt, alleen daar te koop']], u:'A-merk = bekend en duur. B-merk = minder bekend en goedkoper. Huismerk = eigen merk van de winkel.'},
+  {id:'h1.2.09', t:'mc', e:'4A.3', b:'A-merk', q:'Waarom is een A-merk meestal duurder dan een huismerk?', o:['De fabrikant rekent de kosten van reclame door in de prijs','A-merken worden altijd met de hand gemaakt','De overheid heft extra belasting op A-merken','Huismerken krijgen subsidie'], a:0, u:'Examenketen: veel geld voor reclame → kosten doorberekend in de prijs → A-merk is duurder.'},
+  {id:'h1.2.10', t:'mc', e:'K3.r', q:'Je krijgt € 35 korting op een aankoop van € 250. Welke berekening geeft het kortingspercentage?', o:['(35 / 250) × 100%','(250 / 35) × 100%','(250 − 35) / 100','35 × 250 / 100'], a:0, u:'Deel van het geheel: (deel / geheel) × 100% = (35 / 250) × 100% = 14,0%.'}
+ ], gens:['deelVan']},
+ {id:'h1.3', naam:'1.3 Je inkomsten en uitgaven', kort:'Inkomen en begroting', vragen:[
+  {id:'h1.3.01', t:'koppel', e:'4A.2', q:'Koppel het inkomen aan de soort.', p:[['Loon van je bijbaan','Inkomen uit arbeid'],['Rente op je spaarrekening','Inkomen uit bezit'],['Kinderbijslag','Overdrachtsinkomen'],['Gratis lunch op je werk','Inkomen in natura']], u:'Arbeid = beloning voor werk. Bezit = beloning voor vermogen. Overdracht = zonder tegenprestatie. Natura = in goederen of diensten.'},
+  {id:'h1.3.02', t:'mc', e:'4A.2', b:'Overdrachtsinkomen', q:'Zakgeld van je ouders is ...', o:['overdrachtsinkomen','inkomen uit arbeid','inkomen uit bezit','inkomen in natura'], a:0, u:'Je krijgt zakgeld zonder directe tegenprestatie. Dat is overdrachtsinkomen.'},
+  {id:'h1.3.03', t:'mc', e:'4A.2', b:'Inkomen uit bezit', q:'Dividend op aandelen is ...', o:['inkomen uit bezit','inkomen uit arbeid','overdrachtsinkomen','inkomen in natura'], a:0, u:'Rente, huur, dividend en pacht zijn beloningen voor bezit.'},
+  {id:'h1.3.04', t:'mc', e:'4A.2', b:'Inkomen in natura', q:'Een auto van de zaak is ...', o:['inkomen in natura','inkomen uit bezit','overdrachtsinkomen','een vaste last'], a:0, u:'Een beloning in de vorm van goederen of diensten in plaats van geld is inkomen in natura.'},
+  {id:'h1.3.05', t:'koppel', e:'4A.8', q:'Koppel de uitgave aan de soort.', p:[['Huur','Vaste lasten'],['Boodschappen','Dagelijkse uitgaven'],['Een nieuwe wasmachine','Incidentele uitgaven'],['Zorgverzekering','Vaste lasten']], u:'Vaste lasten = met contract en regelmatig. Dagelijks = huishouden. Incidenteel = groot en onregelmatig.'},
+  {id:'h1.3.06', t:'mc', e:'4A.8', b:'Begroting', q:'Wanneer maak je een begroting?', o:['Vooraf, aan het begin van de periode','Achteraf, als je weet wat je hebt uitgegeven','Alleen als je een tekort hebt','Alleen aan het eind van het jaar'], a:0, u:'Een begroting is een overzicht van verwachte inkomsten en uitgaven. Die maak je altijd vooraf.'},
+  {id:'h1.3.07', t:'wo', e:'4A.8', q:'Als je verwachte uitgaven hoger zijn dan je verwachte inkomsten, heb je een overschot.', a:false, u:'Saldo = inkomsten − uitgaven. Is dat negatief, dan heb je een tekort.'},
+  {id:'h1.3.08', t:'mc', e:'4A.8', b:'Nibud', q:'Welke organisatie geeft advies over het huishoudbudget?', o:['Het Nibud','Het CBS','De Belastingdienst','De Consumentenbond'], a:0, u:'Het Nibud (Nationaal Instituut voor Budgetvoorlichting) geeft richtlijnen voor gezinsfinanciën.'},
+  {id:'h1.3.09', t:'mc', e:'K3.t', q:'Je verdient € 60 per week. Hoe reken je dit om naar een maandbedrag?', o:['(60 × 52) / 12','60 × 4','60 × 4,5','(60 × 12) / 52'], a:0, u:'Altijd via het jaar: week × 52 = jaar, gedeeld door 12 = maand. Nooit zomaar × 4.'},
+  {id:'h1.3.10', t:'mc', e:'4A.8', b:'Reserveren', q:'Je wilt over 10 maanden een fiets van € 450 kopen. Hoe heet het als je daar elke maand geld voor opzij zet?', o:['Reserveren','Budgetteren','Lenen','Consumeren'], a:0, u:'Reserveren is doelgericht maandelijks sparen voor een grote uitgave. Hier: 450 / 10 = € 45,00 per maand.'}
+ ], gens:['weekMaand','maandWeek','reservering','saldo']},
+ {id:'h1.4', naam:'1.4 Wordt alles duurder?', kort:'Inflatie en koopkracht', vragen:[
+  {id:'h1.4.01', t:'mc', e:'V1.5', b:'Inflatie', q:'Wat is inflatie?', o:['Een algemene stijging van het prijspeil','De prijs van één product stijgt','Je loon stijgt','Een daling van alle prijzen'], a:0, u:'Inflatie is een algemene, gemiddelde stijging van de prijzen. Je geld wordt minder waard.'},
+  {id:'h1.4.02', t:'mc', e:'V1.5', b:'CBS', q:'Welke instantie meet elke maand de prijzen en berekent de inflatie?', o:['Het CBS','Het Nibud','De Nederlandsche Bank','De Belastingdienst'], a:0, u:'Het Centraal Bureau voor de Statistiek meet maandelijks het prijspeil.'},
+  {id:'h1.4.03', t:'mc', e:'V1.5', b:'Koopkracht', q:'Je loon stijgt met 2% en de inflatie is 5%. Wat gebeurt er met je koopkracht?', o:['Die daalt','Die stijgt','Die blijft gelijk','Dat kun je niet zeggen'], a:0, u:'Koopkracht verandert met loonstijging − inflatie: 2% − 5% = −3%. Je kunt minder kopen.'},
+  {id:'h1.4.04', t:'koppel', e:'V1.5', q:'Koppel het begrip aan de omschrijving.', p:[['Nominaal inkomen','Het bedrag in euro\'s op je loonstrook'],['Reëel inkomen','Wat je echt kunt kopen, rekening houdend met inflatie'],['Deflatie','Een algemene daling van het prijspeil']], u:'Nominaal = in euro\'s. Reëel = gecorrigeerd voor inflatie.'},
+  {id:'h1.4.05', t:'wo', e:'V1.5', b:'Nominaal inkomen', q:'Als je nominale inkomen stijgt, stijgt je koopkracht altijd ook.', a:false, u:'Stijgen de prijzen harder dan je inkomen, dan daalt je koopkracht toch.'},
+  {id:'h1.4.06', t:'mc', e:'V1.5', q:'Maak de examenketen af: de inflatie is hoger dan de loonsverhoging, dus de prijzen stijgen sneller dan het inkomen, dus ...', o:['kun je voor hetzelfde loon minder kopen','kun je voor hetzelfde loon meer kopen','daalt de inflatie vanzelf','stijgt je reëel inkomen'], a:0, u:'Oorzaak → tussenstap → conclusie: de koopkracht daalt.'},
+  {id:'h1.4.07', t:'mc', e:'K3.v', b:'Indexcijfer', q:'Welk indexcijfer heeft het basisjaar altijd?', o:['100','0','1','10'], a:0, u:'Het basisjaar is altijd 100.'},
+  {id:'h1.4.08', t:'wo', e:'K3.v', q:'Bij een indexcijfer zet je een %-teken, bijvoorbeeld 112%.', a:false, u:'Bij een indexcijfer hoort geen % en geen €. Je schrijft gewoon 112.'},
+  {id:'h1.4.09', t:'mc', e:'K3.v', q:'Een bioscoopkaartje ging van € 12,00 naar € 13,80. Welke berekening geeft de procentuele stijging?', o:['((13,80 − 12,00) / 12,00) × 100%','((13,80 − 12,00) / 13,80) × 100%','(13,80 / 12,00) × 100%','13,80 − 12,00'], a:0, u:'Nieuw min oud, gedeeld door oud, keer 100%: (1,80 / 12,00) × 100% = 15,0%.'},
+  {id:'h1.4.10', t:'mc', e:'V1.5', b:'Reëel inkomen', q:'Wat zegt je reële inkomen?', o:['Hoeveel goederen en diensten je echt kunt kopen','Hoeveel euro er op je loonstrook staat','Hoeveel belasting je betaalt','Hoeveel je spaart'], a:0, u:'Reëel inkomen is je inkomen gecorrigeerd voor inflatie.'}
+ ], gens:['koopkracht','procVerandering','index']},
+ {id:'h1.r', naam:'Rekenlab H1', kort:'Alle rekenregels', vragen:[], gens:['pctVan','deelVan','procVerandering','weekMaand','maandWeek','reservering','koopkracht','index','saldo']}
+];
+LEVELS.h1.begrippen = BEGRIPPEN_H1;

@@ -114,6 +114,7 @@ const GENS = {
   index(){ const b=pick([20,25,40,50,80,200]), f=pick([1.04,1.1,1.12,1.25,0.9,1.3]); const v=Math.round(b*f*100)/100, ix=Math.round(v/b*1000)/10; return {t:'reken', e:'K3.v', q:`Een product kostte in het basisjaar ${eur(b)} en nu ${eur(v)}. Wat is het indexcijfer nu? (1 decimaal, zonder %)`, a:ix, eh:'', u:`Indexcijfer = (nu / basisjaar) × 100 = (${nl1(v)} / ${b}) × 100 = ${nl1(ix)}. Geen %-teken!`} },
   saldo(){ const i=pick([180,220,260,300,340]), u=pick([150,190,240,280,320,360]); return {t:'reken', e:'4A.8', q:`Je verwachte inkomsten deze maand zijn ${eur(i)} en je verwachte uitgaven ${eur(u)}. Wat is je saldo? (een tekort is negatief)`, a:i-u, eh:'€', u:`Saldo = inkomsten − uitgaven = ${eur(i)} − ${eur(u)} = ${(i-u<0?'−':'')+eur(Math.abs(i-u))}. ${i-u<0?'Dat is een tekort.':'Dat is een overschot.'}`} }
 };
+Object.assign(GENS, GENS_EXTRA);
 function maakGen(naam){ const v=GENS[naam](); v.id='gen.'+naam; v.gen=true; return v }
 
 // ===== Vragenbank =====

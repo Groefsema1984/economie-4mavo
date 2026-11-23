@@ -1,0 +1,120 @@
+// ===== Hoofdstuk 2: Geld genoeg (bron: 01_KADER_MAVO_4_PINCODE_H2_LESSTOF) =====
+const BEGRIPPEN_H2 = {
+  'Aflossen':'Het terugbetalen van een lening of schuld.',
+  'Chartaal geld':'Tastbaar contant geld: munten en bankbiljetten.',
+  'Giraal geld':'Digitaal geld op een betaalrekening bij de bank.',
+  'Directe ruil':'Goederen of diensten ruilen tegen andere goederen, zonder geld.',
+  'Indirecte ruil':'Ruilen met geld als tussenstap.',
+  'Krediet':'Tijdelijk geld gebruiken van een bank of kredietverstrekker.',
+  'Kredietkosten':'Extra kosten van lenen: (termijnbedrag × aantal termijnen) − krediet.',
+  'Rente':'Vergoeding in procenten voor lenen (betalen) of sparen (ontvangen).',
+  'Saldo':'Het bedrag dat op dit moment op je rekening staat.',
+  'Sparen':'Een deel van je inkomen niet uitgeven maar bewaren voor later.',
+  'Budgetplan':'Overzicht van verwachte inkomsten en uitgaven: is er een overschot of tekort?',
+  'Spaarmotieven':'Sparen voor een doel, uit voorzorg (buffer) of voor de rente.',
+  'Spaardeposito':'Geld staat langere tijd vast tegen een vaste rente.',
+  'Enkelvoudige rente':'Rente alleen over het beginbedrag: (% / 100) × bedrag × jaren.',
+  'Samengestelde rente':'Rente op rente: beginbedrag × groeifactor ^ aantal jaren.',
+  'Groeifactor':'1 + (rentepercentage / 100). Bij 3% rente is de groeifactor 1,03.',
+  'Nominale rente':'Het rentepercentage dat de bank geeft.',
+  'Reële rente':'De echte verandering van je koopkracht: nominale rente − inflatie.',
+  'Beleggen':'Risico nemen met je geld voor een hoger rendement dan sparen.',
+  'Rendement':'Wat je geld oplevert, uitgedrukt in procenten.',
+  'Aandelen':'Bewijs dat je mede-eigenaar bent van een bedrijf. Levert dividend op.',
+  'Obligaties':'Een lening aan een bedrijf of de overheid, tegen een vaste rente.',
+  'Cryptomunten':'Digitale munten zoals bitcoin. Erg risicovol: de koers schommelt sterk.',
+  'Leenmotieven':'Redenen om te lenen: geldtekort, dure aankoop, calamiteit of een huis.',
+  'Persoonlijke lening':'Lening met een vast bedrag, vaste rente en vaste looptijd.',
+  'Koop op afbetaling':'Je neemt het product mee en betaalt in termijnen.',
+  'Private lease':'Je huurt een auto voor een vast bedrag per maand. Je wordt geen eigenaar.',
+  'Salariskrediet':'Lening die je terugbetaalt door inhouding op je salaris.',
+  'Hypothecaire lening':'Lening voor een huis. Het huis is het onderpand voor de bank.',
+  'Onderpand':'Bezit dat de bank mag verkopen als je de lening niet terugbetaalt.',
+  'Ruilmiddel':'Geldfunctie: je betaalt er goederen en diensten mee.',
+  'Rekenmiddel':'Geldfunctie: je kunt de waarde van producten met elkaar vergelijken.',
+  'Spaarmiddel':'Geldfunctie: je kunt koopkracht bewaren voor later.',
+  'Debetsaldo':'Je staat rood: een negatief saldo op je rekening.',
+  'Creditsaldo':'Een positief tegoed op je rekening.',
+  'Creditrente':'De rente die de bank aan spaarders betaalt.',
+  'Debetrente':'De rente die de bank aan leners vraagt. Hoger dan de creditrente.',
+  'Geldkringloop':'Geldstromen tussen gezinnen, banken en bedrijven.',
+  'ECB':'Europese Centrale Bank. Bepaalt de basisrente in de eurozone.'
+};
+
+LEVELS.h2 = [
+ {id:'h2.0', naam:'Weet je het nog?', kort:'Voorkennis geld', vragen:[
+  {id:'h2.0.01', t:'mc', e:'4A.4', b:'Chartaal geld', q:'Wat is chartaal geld?', o:['Munten en bankbiljetten','Geld op je betaalrekening','Geld dat je hebt geleend','Een cadeaubon'], a:0, u:'Chartaal geld is tastbaar contant geld: munten en biljetten.'},
+  {id:'h2.0.02', t:'mc', e:'4A.4', b:'Giraal geld', q:'Je betaalt contactloos met je telefoon. Met welk soort geld betaal je?', o:['Giraal geld','Chartaal geld','Directe ruil','Krediet'], a:0, u:'Giraal geld is digitaal geld op een betaalrekening. Pinnen en mobiel betalen gaan met giraal geld.'},
+  {id:'h2.0.03', t:'koppel', e:'4A.4', q:'Koppel het begrip aan het voorbeeld.', p:[['Directe ruil','Je ruilt je oude spelcomputer tegen een fiets'],['Indirecte ruil','Je verkoopt je spelcomputer en koopt van het geld een fiets'],['Aflossen','Je betaalt elke maand € 50 van je lening terug']], u:'Bij directe ruil komt er geen geld aan te pas. Bij indirecte ruil is geld de tussenstap.'},
+  {id:'h2.0.04', t:'wo', e:'4A.5', b:'Rente', q:'Als je geld leent, betaal je rente. Als je spaart, ontvang je rente.', a:true, u:'Rente is een vergoeding: lener betaalt, spaarder ontvangt.'},
+  {id:'h2.0.05', t:'mc', e:'4A.5', b:'Krediet', q:'Wat is krediet?', o:['Tijdelijk geld gebruiken van een bank of kredietverstrekker','Geld dat je spaart voor later','Het bedrag op je rekening','Korting die je krijgt bij een aankoop'], a:0, u:'Krediet betekent dat je tijdelijk geld van een ander gebruikt. Dat moet je terugbetalen, met rente.'},
+  {id:'h2.0.06', t:'mc', e:'4A.4', b:'Saldo', q:'Wat is het saldo van je bankrekening?', o:['Het bedrag dat er op dit moment op staat','Alles wat je deze maand hebt uitgegeven','De rente die je krijgt','Het maximale bedrag dat je mag pinnen'], a:0, u:'Je saldo is het actuele bedrag op je rekening.'},
+  {id:'h2.0.07', t:'wo', e:'4A.5', b:'Sparen', q:'Sparen betekent dat je een deel van je inkomen nu niet uitgeeft.', a:true, u:'Je bewaart geld voor een later moment.'},
+  {id:'h2.0.08', t:'mc', e:'4A.5', b:'Kredietkosten', q:'Wat zijn kredietkosten?', o:['De extra kosten die lenen met zich meebrengt','Het bedrag dat je leent','De kosten van een bankpas','De kosten van een spaarrekening'], a:0, u:'Kredietkosten = alles wat je terugbetaalt min het geleende bedrag.'},
+  {id:'h2.0.09', t:'wo', e:'4A.5', q:'Bijlenen betekent dat je een lening eerder terugbetaalt.', a:false, u:'Bijlenen is juist extra geld lenen bovenop een lening die je al hebt.'},
+  {id:'h2.0.10', t:'mc', e:'4A.5', q:'Waarom kost lenen altijd geld?', o:['Je betaalt rente aan de kredietverstrekker','De overheid vraagt belasting op elke lening','Je moet altijd een onderpand kopen','De winkel rekent een hogere prijs'], a:0, u:'De kredietverstrekker wil een vergoeding voor het uitlenen: rente.'}
+ ]},
+ {id:'h2.1', naam:'2.1 Hoe geef jij geld uit?', kort:'Uitgaven en budgetplan', vragen:[
+  {id:'h2.1.01', t:'koppel', e:'4A.8', q:'Koppel de uitgave aan de soort uitgave.', p:[['Abonnement op je telefoon','Vaste lasten'],['Brood en melk','Dagelijkse uitgaven'],['Een kapotte koelkast vervangen','Incidentele uitgaven'],['Huur van je kamer','Vaste lasten']], u:'Vaste lasten: contract, regelmatig. Dagelijks: lopend huishouden. Incidenteel: groot, onregelmatig of onverwacht.'},
+  {id:'h2.1.02', t:'mc', e:'4A.8', q:'Welke uitgave is een incidentele uitgave?', o:['Een nieuwe wasmachine omdat de oude kapot is','De maandelijkse huur','Wekelijkse boodschappen','Het abonnement op de sportschool'], a:0, u:'Incidenteel = groot en niet regelmatig of onverwacht.'},
+  {id:'h2.1.03', t:'mc', e:'4A.8', b:'Budgetplan', q:'Waarvoor maak je een budgetplan (begroting)?', o:['Om te zien of je verwacht een overschot of een tekort hebt','Om achteraf te zien waar je geld gebleven is','Om een lening aan te vragen','Om belasting te betalen'], a:0, u:'Een budgetplan zet verwachte inkomsten en uitgaven naast elkaar, vooraf.'},
+  {id:'h2.1.04', t:'wo', e:'4A.8', q:'In een budgetplan zet je de uitgaven die je al gedaan hebt.', a:false, u:'Een budgetplan maak je vooraf, met verwachte inkomsten en uitgaven.'},
+  {id:'h2.1.05', t:'mc', e:'4A.8', q:'Het Nibud is ...', o:['een onafhankelijk instituut dat advies geeft over geldzaken','een bank waar je kunt sparen','het bureau dat de inflatie meet','de instantie die de rente bepaalt'], a:0, u:'Nibud = Nationaal Instituut voor Budgetvoorlichting.'},
+  {id:'h2.1.06', t:'mc', e:'4A.8', q:'Waarom is het slim om te reserveren voor een nieuwe laptop?', o:['Dan heb je het geld klaarliggen als je hem moet vervangen','Dan krijg je korting in de winkel','Dan hoef je geen vaste lasten te betalen','Dan stijgt je inkomen'], a:0, u:'Reserveren is doelgericht geld opzijzetten voor een grote aankoop of vervanging later.'},
+  {id:'h2.1.07', t:'mc', e:'K3.r', q:'Je scooter kost € 2.400 en is na 4 jaar nog € 600 waard. Hoeveel moet je per maand reserveren voor een nieuwe?', o:['€ 37,50','€ 50,00','€ 12,50','€ 450,00'], a:0, u:'(Aanschafprijs − restwaarde) / aantal maanden = (2.400 − 600) / 48 = € 37,50.'},
+  {id:'h2.1.08', t:'mc', e:'4A.7', q:'Je koopt een goedkoop T-shirt dat in een fabriek met slechte arbeidsomstandigheden is gemaakt. Dit gaat over ...', o:['de gevolgen van jouw bestedingen voor anderen','je vaste lasten','het reserveren voor later','je spaarmotief'], a:0, u:'Wat jij koopt heeft gevolgen voor anderen, bijvoorbeeld voor werknemers en het milieu.'},
+  {id:'h2.1.09', t:'wo', e:'4A.8', q:'Als je verwachte inkomsten hoger zijn dan je verwachte uitgaven, heb je een overschot.', a:true, u:'Inkomsten − uitgaven positief = overschot.'},
+  {id:'h2.1.10', t:'mc', e:'4A.8', q:'Je budgetplan laat een tekort zien. Wat is een goede oplossing?', o:['Bezuinigen op uitgaven die niet nodig zijn','Meer vaste lasten afsluiten','Je budgetplan weggooien','Een extra abonnement nemen'], a:0, u:'Bij een tekort ga je minder uitgeven of meer verdienen.'}
+ ], gens:['reservering','restwaarde','saldo']},
+ {id:'h2.2', naam:'2.2 Ga je sparen of beleggen?', kort:'Rente, inflatie en beleggen', vragen:[
+  {id:'h2.2.01', t:'koppel', e:'4A.5', b:'Spaarmotieven', q:'Koppel het voorbeeld aan het spaarmotief.', p:[['Je spaart voor een scooter','Sparen voor een doel'],['Je wilt geld hebben als je fiets kapotgaat','Sparen uit voorzorg'],['Je zet geld vast omdat de rente hoog is','Sparen voor de rente']], u:'Drie spaarmotieven: voor een doel, uit voorzorg (buffer) en voor de rente.'},
+  {id:'h2.2.02', t:'mc', e:'4A.5', q:'Waar hangt het rentebedrag van je spaargeld niet van af?', o:['Je leeftijd','Het rentepercentage','De hoogte van het spaarbedrag','Hoe lang het geld op de bank staat'], a:0, u:'Het rentebedrag hangt af van het percentage, het bedrag en de looptijd.'},
+  {id:'h2.2.03', t:'mc', e:'4A.5', b:'Spaardeposito', q:'Bij een spaardeposito ...', o:['staat je geld lange tijd vast tegen een vaste rente','kun je elke dag geld opnemen','betaal je rente aan de bank','koop je aandelen'], a:0, u:'Een spaardeposito zet je geld vast. Je krijgt dan enkelvoudige rente.'},
+  {id:'h2.2.04', t:'mc', e:'K3.r', b:'Enkelvoudige rente', q:'Je zet € 2.000 vast tegen 3% enkelvoudige rente voor 4 jaar. Hoeveel rente ontvang je in totaal?', o:['€ 240,00','€ 60,00','€ 251,02','€ 2.240,00'], a:0, u:'(3 / 100) × 2.000 × 4 = € 240,00. Let op: de vraag is de rente, niet het eindbedrag.'},
+  {id:'h2.2.05', t:'mc', e:'K3.r', b:'Groeifactor', q:'Wat is de groeifactor bij 4% rente?', o:['1,04','0,04','4','1,4'], a:0, u:'Groeifactor = 1 + (4 / 100) = 1,04.'},
+  {id:'h2.2.06', t:'mc', e:'K3.r', b:'Samengestelde rente', q:'Je spaart € 1.000 tegen 5% samengestelde rente. Welke berekening geeft je tegoed na 3 jaar?', o:['1.000 × 1,05³','1.000 × 0,05 × 3','1.000 + 5 × 3','1.000 × 1,5³'], a:0, u:'Beginbedrag × groeifactor ^ aantal jaren = 1.000 × 1,05³ = € 1.157,63.'},
+  {id:'h2.2.07', t:'wo', e:'4A.5', q:'Bij samengestelde rente krijg je ook rente over de rente van vorige jaren.', a:true, u:'Rente op rente: daarom groeit het bedrag sneller dan bij enkelvoudige rente.'},
+  {id:'h2.2.08', t:'mc', e:'V1.5', b:'Reële rente', q:'De spaarrente is 2% en de inflatie is 4%. Wat gebeurt er met de koopkracht van je spaargeld?', o:['Die daalt','Die stijgt','Die blijft gelijk','Die verdubbelt'], a:0, u:'Reële rente = 2% − 4% = −2%. De prijzen stijgen harder dan je spaargeld: je kunt er minder voor kopen.'},
+  {id:'h2.2.09', t:'koppel', e:'V1.5', q:'Koppel het begrip aan de omschrijving.', p:[['Nominale rente','Het rentepercentage dat de bank geeft'],['Reële rente','De echte verandering van je koopkracht'],['Inflatie','Een algemene stijging van het prijspeil']], u:'Reële rente = nominale rente − inflatie.'},
+  {id:'h2.2.10', t:'mc', e:'4A.5', b:'Beleggen', q:'Wat is het verschil tussen beleggen en sparen?', o:['Bij beleggen neem je meer risico voor een hoger rendement','Bij beleggen is je geld altijd veilig','Bij sparen krijg je altijd meer rendement','Er is geen verschil'], a:0, u:'Beleggen kan meer opleveren, maar je kunt ook geld verliezen.'},
+  {id:'h2.2.11', t:'koppel', e:'4A.5', q:'Koppel de belegging aan de omschrijving.', p:[['Aandelen','Je wordt mede-eigenaar van een bedrijf'],['Obligaties','Je leent geld uit aan een bedrijf of de overheid'],['Cryptomunten','Digitale munten met een sterk schommelende koers']], u:'Aandelen = eigendom, obligaties = lening, crypto = digitaal en zeer risicovol.'},
+  {id:'h2.2.12', t:'wo', e:'4A.5', b:'Rendement', q:'Cryptomunten zijn een veilige belegging, want je kunt er niets op verliezen.', a:false, u:'De koers van cryptomunten schommelt heel sterk. Je kunt veel geld verliezen.'}
+ ], gens:['enkelRente','samenRente','reeleRente']},
+ {id:'h2.3', naam:'2.3 Wie leent maakt schulden', kort:'Lenen en kredietkosten', vragen:[
+  {id:'h2.3.01', t:'koppel', e:'4A.5', b:'Leenmotieven', q:'Koppel de situatie aan het leenmotief.', p:[['Je salaris komt pas over een week, maar de huur moet nu betaald','Tijdelijk geldtekort overbruggen'],['Je wilt nu een nieuwe bank en niet een jaar sparen','Dure aankoop niet uitstellen'],['Je auto moet onverwacht gerepareerd worden','Onverwacht dringend geld nodig'],['Je koopt een appartement','Een huis kopen']], u:'Vier leenmotieven: geldtekort, dure aankoop niet uitstellen, calamiteit en een huis kopen.'},
+  {id:'h2.3.02', t:'mc', e:'K3.r', q:'Je leent € 3.000 en betaalt 36 termijnen van € 95. Hoeveel zijn de kredietkosten?', o:['€ 420','€ 3.420','€ 95','€ 300'], a:0, u:'(Termijnbedrag × aantal termijnen) − krediet = (95 × 36) − 3.000 = 3.420 − 3.000 = € 420.'},
+  {id:'h2.3.03', t:'mc', e:'4A.5', q:'Waar moet je vooral op letten als je geld leent?', o:['Of je de termijnen elke maand kunt betalen','Of de lening een mooie naam heeft','Of de bank dichtbij is','Of je vrienden ook lenen'], a:0, u:'Kun je de maandlasten echt betalen? Anders kom je in de schulden.'},
+  {id:'h2.3.04', t:'koppel', e:'4A.5', q:'Koppel de leenvorm aan de omschrijving.', p:[['Persoonlijke lening','Vast bedrag, vaste rente, vaste looptijd'],['Koop op afbetaling','Je neemt het product mee en betaalt in termijnen'],['Private lease','Je huurt een auto per maand en wordt geen eigenaar'],['Salariskrediet','Wordt ingehouden op je salaris']], u:'Dit zijn vormen van consumptief krediet.'},
+  {id:'h2.3.05', t:'mc', e:'4A.5', b:'Hypothecaire lening', q:'Wat is bijzonder aan een hypothecaire lening?', o:['Het huis is het onderpand voor de bank','Je betaalt nooit rente','Je hoeft niets terug te betalen','Je mag er alleen een auto van kopen'], a:0, u:'Een hypotheek is voor een huis. Betaal je niet terug, dan mag de bank het huis verkopen.'},
+  {id:'h2.3.06', t:'mc', e:'4A.5', b:'Onderpand', q:'Wat is een onderpand?', o:['Bezit dat de bank mag verkopen als je niet terugbetaalt','Het maandbedrag van je lening','De rente op je spaarrekening','Een tweede lening'], a:0, u:'Bij een hypotheek is het huis het onderpand.'},
+  {id:'h2.3.07', t:'wo', e:'4A.5', b:'Private lease', q:'Bij private lease ben je aan het eind van het contract eigenaar van de auto.', a:false, u:'Bij private lease huur je de auto. Je wordt nooit eigenaar.'},
+  {id:'h2.3.08', t:'mc', e:'4A.5', b:'Persoonlijke lening', q:'Je leent € 1.200 en lost dat in 24 maanden af. Hoe heet het terugbetalen van de € 1.200?', o:['Aflossen','Rente betalen','Bijlenen','Reserveren'], a:0, u:'Aflossen is het terugbetalen van het geleende bedrag. Rente komt daar bovenop.'},
+  {id:'h2.3.09', t:'mc', e:'K3.r', q:'Een telefoon kost contant € 600. Op afbetaling betaal je 24 × € 28. Hoeveel duurder is de telefoon op afbetaling?', o:['€ 72','€ 28','€ 672','€ 24'], a:0, u:'24 × 28 = € 672. Kredietkosten = 672 − 600 = € 72.'},
+  {id:'h2.3.10', t:'wo', e:'4A.5', q:'Een lening voor een huis is een consumptief krediet.', a:false, u:'Een hypotheek is een lening voor onroerend goed. Consumptief krediet is voor consumptiegoederen.'}
+ ], gens:['kredietkosten','totaalTerug']},
+ {id:'h2.4', naam:'2.4 Geld moet rollen', kort:'Geldfuncties, banken en rente', vragen:[
+  {id:'h2.4.01', t:'koppel', e:'4A.4', q:'Koppel de geldfunctie aan het voorbeeld.', p:[['Ruilmiddel','Je betaalt je boodschappen'],['Rekenmiddel','Je vergelijkt de prijs van twee telefoons'],['Spaarmiddel','Je bewaart geld voor je rijbewijs']], u:'Drie geldfuncties: ruilmiddel, rekenmiddel en spaarmiddel.'},
+  {id:'h2.4.02', t:'mc', e:'4A.4', b:'Rekenmiddel', q:'Dankzij geld kun je zien dat een fiets van € 400 vier keer zo duur is als een jas van € 100. Welke functie van geld is dit?', o:['Rekenmiddel','Ruilmiddel','Spaarmiddel','Betaalmiddel'], a:0, u:'Waarde vergelijken = geld als rekenmiddel.'},
+  {id:'h2.4.03', t:'mc', e:'4A.4', b:'Debetsaldo', q:'Je hebt € 30 op je rekening en pint € 50. Wat is er aan de hand?', o:['Je hebt een debetsaldo van € 20','Je hebt een creditsaldo van € 20','Je hebt een creditsaldo van € 80','Er is niets aan de hand'], a:0, u:'30 − 50 = −20. Een negatief saldo heet debetsaldo: je staat rood.'},
+  {id:'h2.4.04', t:'wo', e:'4A.4', b:'Creditsaldo', q:'Een creditsaldo betekent dat je rood staat.', a:false, u:'Credit = positief tegoed. Debet = rood staan.'},
+  {id:'h2.4.05', t:'mc', e:'K3.r', q:'Je saldo is € 120. Je ontvangt € 85 loon en betaalt € 60 aan je telefoonrekening. Wat is je nieuwe saldo?', o:['€ 145','€ 265','€ 95','€ 25'], a:0, u:'Nieuw saldo = oud saldo + ontvangsten − betalingen = 120 + 85 − 60 = € 145.'},
+  {id:'h2.4.06', t:'mc', e:'4A.4', q:'Welke rol hebben banken in de economie?', o:['Ze bemiddelen tussen spaarders en leners','Ze bepalen de prijzen in de winkels','Ze innen de belasting','Ze drukken zelf bankbiljetten'], a:0, u:'Banken halen geld op bij spaarders en lenen het uit aan gezinnen en bedrijven.'},
+  {id:'h2.4.07', t:'mc', e:'4A.4', b:'Debetrente', q:'Hoe verdient een bank geld?', o:['De debetrente voor leners is hoger dan de creditrente voor spaarders','De creditrente is hoger dan de debetrente','Banken krijgen geld van de ECB voor elke klant','Banken verdienen niets, ze zijn van de overheid'], a:0, u:'Het verschil tussen debetrente en creditrente is de winst, plus kosten voor bankrekeningen.'},
+  {id:'h2.4.08', t:'koppel', e:'4A.4', b:'Creditrente', q:'Koppel het begrip aan de omschrijving.', p:[['Creditrente','Rente die spaarders ontvangen'],['Debetrente','Rente die leners betalen'],['ECB','Bepaalt de basisrente in de eurozone']], u:'De bank betaalt creditrente en ontvangt debetrente.'},
+  {id:'h2.4.09', t:'mc', e:'4A.5', b:'ECB', q:'De ECB verhoogt de rente. Wat is het gevolg?', o:['Consumenten sparen meer en lenen minder, de bestedingen nemen af','Consumenten sparen minder en lenen meer, de bestedingen nemen toe','De prijzen dalen direct met de helft','Er verandert niets'], a:0, u:'Hoge rente: sparen loont, lenen is duur. Dus minder bestedingen.'},
+  {id:'h2.4.10', t:'mc', e:'4A.5', q:'Maak de examenketen af: de rente daalt, dus lenen wordt goedkoper en sparen levert minder op, dus ...', o:['nemen de bestedingen toe','nemen de bestedingen af','gaan consumenten meer sparen','stijgt de creditrente'], a:0, u:'Lage rente: minder sparen, meer lenen, meer bestedingen.'},
+  {id:'h2.4.11', t:'mc', e:'4A.4', b:'Geldkringloop', q:'In de geldkringloop: welke stroom gaat van bedrijven naar gezinnen?', o:['Loon','Consumptieve uitgaven','Spaargeld','Investeringsleningen'], a:0, u:'Gezinnen leveren arbeid aan bedrijven en krijgen daarvoor loon.'}
+ ], gens:['nieuwSaldo','enkelRente']},
+ {id:'h2.r', naam:'Rekenlab H2', kort:'Alle rekenregels', vragen:[], gens:['reservering','restwaarde','enkelRente','samenRente','reeleRente','kredietkosten','totaalTerug','nieuwSaldo']}
+];
+LEVELS.h2.begrippen = BEGRIPPEN_H2;
+
+Object.assign(GENS_EXTRA, {
+  restwaarde(){ const p=pick([1200,1800,2400,3000,3600]), r=pick([0,200,300,600]), j=pick([2,3,4,5]); const m=j*12, a=Math.round((p-r)/m*100)/100; const wat=pick(['scooter','laptop','e-bike','wasmachine']); return {t:'reken', e:'4A.8', q:`Een ${wat} kost ${eur(p)} en is na ${j} jaar nog ${eur(r)} waard. Hoeveel moet je per maand reserveren om hem dan te vervangen?`, a, eh:'€', u:`(aanschafprijs − restwaarde) / aantal maanden = (${eur(p)} − ${eur(r)}) / ${m} = ${eur(a)}.`} },
+  enkelRente(){ const b=pick([500,800,1000,1500,2000,2500,4000]), p=pick([1.5,2,2.5,3,3.5,4]), j=pick([2,3,4,5]); const a=Math.round(p/100*b*j*100)/100; return {t:'reken', e:'4A.5', q:`Je zet ${eur(b)} vast tegen ${nl1(p)}% enkelvoudige rente voor ${j} jaar. Hoeveel rente ontvang je in totaal?`, a, eh:'€', u:`(${nl1(p)} / 100) × ${eur(b)} × ${j} = ${eur(a)}.`} },
+  samenRente(){ const b=pick([500,1000,1500,2000,3000]), p=pick([2,3,4,5,6]), j=pick([2,3,4,5]); const a=Math.round(b*Math.pow(1+p/100,j)*100)/100; return {t:'reken', e:'4A.5', q:`Je spaart ${eur(b)} tegen ${p}% samengestelde rente. Hoeveel staat er na ${j} jaar op je rekening?`, a, eh:'€', u:`Groeifactor = 1 + ${p}/100 = ${String(1+p/100).replace('.',',')}. Tegoed = ${eur(b)} × ${String(1+p/100).replace('.',',')}^${j} = ${eur(a)}. Rond pas aan het eind af.`} },
+  reeleRente(){ const r=pick([1,1.5,2,2.5,3,3.5,4]), i=pick([1,2,2.5,3,4,5,6]); const k=Math.round((r-i)*10)/10; return {t:'reken', e:'V1.5', q:`De spaarrente is ${nl1(r)}% en de inflatie is ${nl1(i)}%. Wat is de reële rente? (een daling is negatief)`, a:k, eh:'%', u:`Reële rente = nominale rente − inflatie = ${nl1(r)}% − ${nl1(i)}% = ${nl1(k)}%.`} },
+  kredietkosten(){ const k=pick([1000,1500,2000,2500,3000,5000]), n=pick([12,18,24,36,48]); const t=Math.ceil(k/n*pick([1.06,1.08,1.1,1.12,1.15])); const a=t*n-k; return {t:'reken', e:'4A.5', q:`Je leent ${eur(k)} en betaalt ${n} termijnen van ${eur(t)}. Hoeveel zijn de kredietkosten?`, a, eh:'€', u:`(termijnbedrag × aantal termijnen) − krediet = (${eur(t)} × ${n}) − ${eur(k)} = ${eur(t*n)} − ${eur(k)} = ${eur(a)}.`} },
+  totaalTerug(){ const t=pick([25,35,45,55,79,99]), n=pick([12,18,24,36]); const wat=pick(['een telefoon','een laptop','een bank','een e-bike']); return {t:'reken', e:'4A.5', q:`Je koopt ${wat} op afbetaling: ${n} termijnen van ${eur(t)}. Hoeveel betaal je in totaal?`, a:t*n, eh:'€', u:`Termijnbedrag × aantal termijnen = ${eur(t)} × ${n} = ${eur(t*n)}.`} },
+  nieuwSaldo(){ const o=pick([-40,25,80,150,230]), i=pick([45,90,120,260]), b=pick([35,70,110,180,300]); const a=o+i-b; const s=x=>(x<0?'−':'')+eur(Math.abs(x)); return {t:'reken', e:'4A.4', q:`Je saldo is ${s(o)}. Je ontvangt ${eur(i)} en je betaalt ${eur(b)}. Wat is je nieuwe saldo? (rood staan is negatief)`, a, eh:'€', u:`Nieuw saldo = oud saldo + ontvangsten − betalingen = ${s(o)} + ${eur(i)} − ${eur(b)} = ${s(a)}. ${a<0?'Een debetsaldo: je staat rood.':'Een creditsaldo.'}`} }
+});

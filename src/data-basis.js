@@ -41,7 +41,7 @@ const EINDTERMEN = {
 // De acht hoofdstukwerelden + de examenwereld. Alleen werelden met vragen zijn speelbaar.
 const WERELDEN = [
   {id:'h1', nr:1, naam:'Hoe welvarend ben jij?', icoon:'🛍️', kleur:'#e07a2f'},
-  {id:'h2', nr:2, naam:'Hoofdstuk 2', icoon:'💶', kleur:'#d9a521'},
+  {id:'h2', nr:2, naam:'Geld genoeg', icoon:'💶', kleur:'#d9a521'},
   {id:'h3', nr:3, naam:'Ben jij ondernemend?', icoon:'🚀', kleur:'#2f7de0'},
   {id:'h4', nr:4, naam:'Werk aan de winkel', icoon:'🏪', kleur:'#2fa7c9'},
   {id:'h5', nr:5, naam:'Hoe werkt de overheid?', icoon:'🏛️', kleur:'#7a4fd6'},
@@ -51,4 +51,4 @@ const WERELDEN = [
 ];
 
 // Wordt per hoofdstuk gevuld door de data-hX.js bestanden
-const LEVELS = {};   // wereldId -> [{id, naam, kort, vragen:[...], gens:[...]}]
+const LEVELS = {}; const GENS_EXTRA = {};   // wereldId -> [{id, naam, kort, vragen:[...], gens:[...]}]

@@ -18,7 +18,7 @@ function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor
 const duiz = s => s.replace(/\B(?=(\d{3})+(?!\d))/g,'.');
 const eur = x => '€ '+(x<0?'−':'')+(()=>{const [h,d]=Math.abs(x).toFixed(2).split('.'); return duiz(h)+','+d})();
 const gt = x => (x<0?'−':'')+duiz(String(Math.round(Math.abs(x))));
-const nl1 = x => x.toFixed(1).replace('.',',');
+const nl1 = x => { const [h,d]=Math.abs(x).toFixed(1).split('.'); return (x<=-0.05?'−':'')+duiz(h)+','+d };
 const vandaag = ()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
 function weekId(d=new Date()){const t=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));const dn=t.getUTCDay()||7;t.setUTCDate(t.getUTCDate()+4-dn);const y=new Date(Date.UTC(t.getUTCFullYear(),0,1));return t.getUTCFullYear()+'-W'+String(Math.ceil(((t-y)/864e5+1)/7)).padStart(2,'0')}
 const minuten = s => Math.round((s||0)/60);

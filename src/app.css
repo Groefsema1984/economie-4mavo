@@ -36,7 +36,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 .knop.zacht{background:var(--kaart);color:var(--ink);border:1px solid var(--lijn)}
 .knop.vol{width:100%}
 .knop:disabled{opacity:.45}
-.vraag{font-size:20px;font-weight:600;margin:6px 0 18px}
+.vraag{white-space:pre-line;font-size:20px;font-weight:600;margin:6px 0 18px}
 .opties{display:grid;gap:10px}
 .optie{border:2px solid var(--lijn);background:var(--kaart);border-radius:14px;padding:14px 16px;text-align:left;font-size:17px;display:flex;gap:12px;align-items:flex-start;min-height:54px}
 .optie .l{font-weight:800;color:var(--acc);min-width:20px}

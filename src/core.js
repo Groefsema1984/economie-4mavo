@@ -128,12 +128,16 @@ function nakijken(v, antw){
   if(v.t==='reken'){ const x=parseGetal(antw); if(isNaN(x)) return false; const tol = v.eh==='€'?0.011:0.051; return Math.abs(x-v.a)<=tol }
   return false;
 }
+// kaarten die een vraag oplevert: het begrip b, en bij koppelvragen elk begrip uit de paren dat een kaart is
+let _alleKaarten=null;
+function kaartenVan(v){ if(!_alleKaarten){ _alleKaarten=new Set(); for(const w in LEVELS) Object.keys(LEVELS[w].begrippen||{}).forEach(k=>_alleKaarten.add(k)) }
+  const c=[v.b].concat(v.t==='koppel'?v.p.flat():[]); return [...new Set(c.filter(k=>k&&_alleKaarten.has(k)))] }
 function registreer(v, goed){
   if(!v.gen){ const r=S.vr[v.id]||{g:0,f:0}; goed?r.g++:r.f++; r.t=Date.now(); S.vr[v.id]=r; }
   else { const k=v.id; const r=S.vr[k]||{g:0,f:0}; goed?r.g++:r.f++; S.vr[k]=r; }
   if(v.e){ const et=S.et[v.e]||{n:0,r:[]}; et.r=et.r.concat(goed?1:0).slice(-20); et.n++; S.et[v.e]=et; }
   let nieuweKaart=false;
-  if(goed){ S.xp+=10; S.mVerd+=1; if(v.b&&!S.kaarten.includes(v.b)){ S.kaarten.push(v.b); nieuweKaart=true } }
+  if(goed){ S.xp+=10; S.mVerd+=1; const nw=kaartenVan(v).filter(k=>!S.kaarten.includes(k)); if(nw.length){ S.kaarten.push(...nw); nieuweKaart=nw } }
   // herhaalronde: foute vragen komen terug, na 2× goed verdwijnen ze
   if(!v.gen){
     if(!goed){ if(!S.herhaal.includes(v.id)) S.herhaal.push(v.id); S.hgoed[v.id]=0; }

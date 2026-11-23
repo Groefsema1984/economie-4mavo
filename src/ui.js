@@ -232,7 +232,7 @@ function juistTekst(v){
   if(v.t==='reken') return v.eh==='€'?eur(v.a):(nl1(v.a)+(v.eh==='%'?'%':'')); if(v.t==='koppel') return v.p.map(p=>p[0]+' → '+p[1]).join(' · ');
 }
 function controleer(){
-  if(Q.fase!=='vraag') return; const v=Q.vragen[Q.i]; const goed=nakijken(v,antw); Q.res.push(goed); const nk=registreer(v,goed); if(nk) Q.kaartGemeld=(Q.kaartGemeld||[]).concat(v.b); Q.fase='fb';
+  if(Q.fase!=='vraag') return; const v=Q.vragen[Q.i]; const goed=nakijken(v,antw); Q.res.push(goed); const nk=registreer(v,goed); if(nk) Q.kaartGemeld=(Q.kaartGemeld||[]).concat(nk); Q.fase='fb';
   const toets=Q.modus==='toets';
   if(!toets){
     if(v.t==='mc'||v.t==='wo'||v.t==='ex') document.querySelectorAll('.optie').forEach(x=>{ const k=x.dataset.k; const isJ=String(v.a)===k; if(isJ) x.classList.add('goed'); else if(x.classList.contains('kies')) x.classList.add('fout') });

@@ -34,7 +34,7 @@ welkom(){
     <div class="voet"><button class="knop vol" onclick="nieuwAccount()">Start</button></div></div>
    ${serverModus()?`<div class="kaart" style="margin-top:14px"><h3 style="margin-top:0">Ik heb al een account</h3>
     <p class="zacht" style="margin-top:0">Nieuwe iPad, of de app opnieuw geopend? Vul je speler-ID en herstelcode in. Je voortgang komt terug.</p>
-    <label class="label">Speler-ID</label><input type="text" id="hId" autocapitalize="characters" placeholder="bijv. 4MA-K7QD">
+    <label class="label">Speler-ID</label><input type="text" id="hId" autocapitalize="characters" placeholder="bijv. ECON1-K7QD">
     <label class="label">Herstelcode (6 cijfers)</label><input type="text" id="hCode" inputmode="numeric" maxlength="6">
     <div class="voet"><button class="knop zacht vol" onclick="herstelAccount()">Herstel mijn voortgang</button></div></div>`:
    `<p class="zacht mid" style="font-size:14px">Testmodus: de voortgang staat alleen op dit apparaat.</p>`}

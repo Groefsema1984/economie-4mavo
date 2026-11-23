@@ -5,7 +5,7 @@
  */
 const CFG = {
   DOCENT_CODE: '4040',        // code voor het docentenscherm in de app (zelf wijzigen!)
-  KLASSEN: ['4MA', '4MB'],    // toegestane klassen (gelijk aan KLASSEN in de app)
+  KLASSEN: ['Econ1', 'Econ2'],    // toegestane klassen (gelijk aan KLASSEN in de app)
   MAX_MISLUKT: 10             // na zoveel foute herstelpogingen wordt herstellen geblokkeerd
 };
 
@@ -64,7 +64,7 @@ function nieuw_(d) {
   if (naam.length < 3) throw new Error('Vul je naam in');
   if (CFG.KLASSEN.indexOf(klas) < 0) throw new Error('Onbekende klas');
   const sp = sheet_('Spelers'); const ids = kolom_(sp, 1); const codes = kolom_(sp, 4).map(String);
-  let id; do { id = klas + '-' + rndTekst_(4); } while (ids.indexOf(id) >= 0);
+  let id; do { id = klas.toUpperCase() + '-' + rndTekst_(4); } while (ids.indexOf(id) >= 0);
   let code; do { code = String(Math.floor(100000 + Math.random() * 900000)); } while (codes.indexOf(code) >= 0);
   const nu = new Date();
   sp.appendRow([id, naam, klas, "'" + code, nu, nu, 0, 0, 0, 0, 0, '', '', '', '', '', 0]);

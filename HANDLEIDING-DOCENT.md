@@ -28,7 +28,7 @@ Na 10 foute herstelpogingen wordt een account geblokkeerd. Vrijgeven: zet in het
 
 1. Ga naar sheets.google.com en maak een nieuwe lege spreadsheet, bijvoorbeeld "Economie 4M – server". Deel hem met niemand.
 2. Kies **Extensies > Apps Script**. Verwijder de voorbeeldcode en plak de inhoud van `server/Code.gs`. Klik op Opslaan.
-3. Pas bovenaan `CFG` aan: `DOCENT_CODE` (jouw code voor het docentenscherm) en `KLASSEN` (de namen van jullie twee klassen).
+3. Pas bovenaan `CFG` aan: `DOCENT_CODE` (jouw code voor het docentenscherm) en `KLASSEN` (staat al op de clustergroepen Econ1 en Econ2).
 4. Kies de functie **setup** en klik op **Uitvoeren**. Geef toestemming (Geavanceerd > Ga naar … > Toestaan).
    Er verschijnen de tabbladen Spelers, Data en Logboek.
 5. **Implementeren > Nieuwe implementatie > Web-app**. Uitvoeren als: *Ikzelf*. Toegang: *Iedereen*. Kopieer de URL (eindigt op `/exec`).

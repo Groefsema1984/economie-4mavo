@@ -1,7 +1,7 @@
 // ===== Instellingen =====
 // URL van het Apps Script (web-app, eindigt op /exec). Leeg = alleen opslag op dit apparaat (testmodus).
 const DATA_ENDPOINT_URL = "";
-const KLASSEN = ['4MA','4MB'];           // klassen waaruit leerlingen kiezen
+const KLASSEN = ['Econ1','Econ2'];           // klassen waaruit leerlingen kiezen
 const KEY = 'eco4m-v1';                  // opslagsleutel op het apparaat
 const VERSIE = '1.0';
 const VRAGEN_PER_LEVEL = 8;

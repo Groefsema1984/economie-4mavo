@@ -118,9 +118,9 @@ function sheet_(n) { return SpreadsheetApp.getActiveSpreadsheet().getSheetByName
 function kolom_(b, k) { return b.getLastRow() > 1 ? b.getRange(2, k, b.getLastRow() - 1, 1).getValues().map(function (r) { return r[0]; }) : []; }
 function zoek_(id) {
   id = String(id || '').toUpperCase(); if (!id) return null;
-  const sp = sheet_('Spelers'); const ids = kolom_(sp, 1); const i = ids.indexOf(id); if (i < 0) return null;
+  const sp = sheet_('Spelers'); const ids = kolom_(sp, 1); const i = ids.map(function (x) { return String(x).toUpperCase(); }).indexOf(id); if (i < 0) return null;
   const rij = i + 2; const v = sp.getRange(rij, 1, 1, 17).getValues()[0];
-  return { rij: rij, id: id, naam: v[1], klas: v[2], code: String(v[3]).replace(/^'/, ''), mislukt: Number(v[16]) || 0 };
+  return { rij: rij, id: String(v[0]), naam: v[1], klas: v[2], code: String(v[3]).replace(/^'/, ''), mislukt: Number(v[16]) || 0 };
 }
 function controleerCode_(r, code) {
   const sp = sheet_('Spelers');
@@ -132,7 +132,7 @@ function controleerCode_(r, code) {
   if (r.mislukt) sp.getRange(r.rij, 17).setValue(0);
 }
 function leesStaat_(id) {
-  const db = sheet_('Data'); const ids = kolom_(db, 1); const i = ids.indexOf(id); if (i < 0) return null;
+  const db = sheet_('Data'); const ids = kolom_(db, 1); const i = ids.map(function (x) { return String(x).toUpperCase(); }).indexOf(id); if (i < 0) return null;
   const v = db.getRange(i + 2, 3, 1, 4).getValues()[0];
   try { return JSON.parse(v.join('')); } catch (e) { return null; }
 }

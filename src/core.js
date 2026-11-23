@@ -15,12 +15,14 @@ const esc = s => String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 const rnd = (a,b)=>a+Math.floor(Math.random()*(b-a+1));
 const pick = arr => arr[Math.floor(Math.random()*arr.length)];
 function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
-const eur = x => '€ '+x.toFixed(2).replace('.',',');
+const duiz = s => s.replace(/\B(?=(\d{3})+(?!\d))/g,'.');
+const eur = x => '€ '+(x<0?'−':'')+(()=>{const [h,d]=Math.abs(x).toFixed(2).split('.'); return duiz(h)+','+d})();
+const gt = x => (x<0?'−':'')+duiz(String(Math.round(Math.abs(x))));
 const nl1 = x => x.toFixed(1).replace('.',',');
 const vandaag = ()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
 function weekId(d=new Date()){const t=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));const dn=t.getUTCDay()||7;t.setUTCDate(t.getUTCDate()+4-dn);const y=new Date(Date.UTC(t.getUTCFullYear(),0,1));return t.getUTCFullYear()+'-W'+String(Math.ceil(((t-y)/864e5+1)/7)).padStart(2,'0')}
 const minuten = s => Math.round((s||0)/60);
-function parseGetal(s){ if(s==null) return NaN; s=String(s).trim().replace(/[€%\s]/g,''); if(/^-?\d{1,3}(\.\d{3})+(,\d+)?$/.test(s)) s=s.replace(/\./g,''); s=s.replace(',','.'); return s===''?NaN:Number(s) }
+function parseGetal(s){ if(s==null) return NaN; s=String(s).trim().replace(/[−–]/g,'-').replace(/[€%\s]/g,''); if(/^-?\d{1,3}(\.\d{3})+(,\d+)?$/.test(s)) s=s.replace(/\./g,''); s=s.replace(',','.'); return s===''?NaN:Number(s) }
 
 // ===== Toestand van de leerling =====
 // Alles wat alleen kan groeien (tijd, aantallen, medailles) wordt bij samenvoegen met max/union gecombineerd,

@@ -5,16 +5,24 @@ function melding(t,ms=2600){const m=document.createElement('div');m.className='m
 function zetThema(){document.body.className='th-'+(S&&S.thema||'standaard')}
 
 function go(s,arg){ scherm=s; oefenActief=(s==='quiz'); window.scrollTo(0,0); const f=SCHERMEN[s]; app().innerHTML=f(arg); if(SCHERMEN[s+'_na']) SCHERMEN[s+'_na'](arg); nav(); }
-const GOLF='<svg class="golf" viewBox="0 0 1440 60" preserveAspectRatio="none" aria-hidden="true"><path d="M0,34 C240,62 520,64 760,44 C1010,22 1220,6 1440,22 L1440,60 L0,60 Z"/></svg>';
-const VOET=()=>`<footer class="voettekst"><div class="in"><b>vellesan <span class="o">college</span></b><span>Economie 4 mavo · oefenapp bij Pincode</span><span style="margin-left:auto">Oefenen tot het goed is</span></div></footer>`;
+// Foto's: Unsplash (gratis te gebruiken onder de Unsplash-licentie), geladen via images.unsplash.com
+const FOTO={start:'1522202176988-66273c2fd55f',h1:'1483985988355-763728e1935b',h2:'1550133881-13e70aa00bae',h3:'1531058240690-006c446962d8',h4:'1556742049-0cfed4f6a45d',
+ h5:'1577968681068-2d3e2521f7af',h6:'1554224154-26032ffc0d07',h7:'1601631547725-a42f63b10ac8',h8:'1777065851469-71aef898a26f',examen:'1606326608690-4e0281b1e588',
+ sprint:'1704265586142-db3e17d0dea0',vaardig:'1611974789855-9c2a0a7236a3',herhaal:'1434030216411-0b793f4b4173',docent:'1509062522246-3755977927d7',collectie:'1785780224428-7b690d3d58bd',account:'1522071820081-009f0129c71c'};
+const foto=(k,w=1400)=>FOTO[k]?`background-image:url('https://images.unsplash.com/photo-${FOTO[k]}?w=${w}&q=70&auto=format&fit=crop')`:'';
+const VOET=()=>`<footer class="voettekst"><div class="in"><b>vellesan <span class="o">college</span></b><span>Economie 4 mavo · oefenapp bij de methode Pincode</span><span style="margin-left:auto">Foto's: Unsplash</span></div></footer>`;
+const initialen=n=>(n||'?').split(' ').filter(Boolean).map(x=>x[0]).filter(c=>/[A-Za-zÀ-ÿ]/.test(c)).slice(0,2).join('').toUpperCase()||'?';
 function nav(){
   document.body.dataset.scherm=scherm;
-  let n=$('.nav'); if(!S||!S.naam||scherm==='quiz'||scherm==='welkom'){ if(n) n.remove(); return }
-  if(!n){ n=document.createElement('nav'); n.className='nav'; document.body.appendChild(n) }
-  const items=[['home','🗺️','Werelden'],['vaardig','📊','Vaardigheden'],['herhaal','🔁','Herhalen'],['collectie','🏅','Collectie'],['account','👤','Account']];
-  n.innerHTML=items.map(([s,i,t])=>`<button class="${scherm===s?'aan':''}" onclick="go('${s}')"><span>${i}</span>${t}</button>`).join('');
+  const m=$('#menu'), p=$('#profiel'); if(!m) return;
+  if(!S||!S.naam||scherm==='quiz'||scherm==='welkom'){ m.innerHTML=''; p.innerHTML=''; return }
+  const exOpen=typeof EXAMEN!=='undefined'&&EXAMEN.vragen.length>0;
+  const items=[['home','Start'],exOpen?['examen','Eindexamen']:null,['vaardig','Vaardigheden'],['herhaal','Herhalen'+(S.herhaal.length?` (${S.herhaal.length})`:'')],['collectie','Collectie'],['account','Account']].filter(Boolean);
+  const actief=scherm==='wereld'||scherm==='resultaat'?'home':scherm;
+  m.innerHTML=items.map(([s,t])=>`<button class="${actief===s?'aan':''}" onclick="go('${s}')">${t}</button>`).join('');
+  p.innerHTML=`<button class="profiel" onclick="go('account')"><span class="avatar">${esc(initialen(S.naam))}</span><span>${esc(S.naam)}</span></button>`+(exOpen?`<button class="ikoonknop" onclick="startSprint()">⚡<span class="t">Sprint</span></button>`:'');
 }
-function kop(titel,terug){ return `<div class="top">${terug?`<button class="terug" onclick="${terug}">‹ Terug</button>`:''}<h1>${titel}</h1><span class="chip">🪙 ${munten()}</span><span class="chip">⭐ ${S.xp}</span><span class="chip">⏱️ ${minuten(S.tijd)} min</span></div>` }
+function kop(titel,terug){ return `<div class="foto paginakop" style="${foto(scherm,1400)}"><div class="bovenin">${terug?`<button class="terug" onclick="${terug}">‹ Terug</button>`:''}<span class="chip">🪙 ${munten()}</span><span class="chip">⭐ ${S.xp}</span><span class="chip">⏱️ ${minuten(S.tijd)} min</span></div><span class="eyebrow" style="color:var(--acc)">Economie 4 mavo</span><h1>${titel}</h1></div>` }
 
 // --- voortgang per wereld ---
 function wereldStand(w){
@@ -29,22 +37,24 @@ function toetsOpen(w){ return LEVELS[w].filter(l=>l.vragen.length).every(l=>((S.
 const SCHERMEN = {
 welkom(){
   const opties=KLASSEN.map(k=>`<option>${k}</option>`).join('');
-  return `<section class="hero"><div class="in"><span class="eyebrow">Economie · 4 mavo</span>
-    <h1>Oefen slim voor je<br>eindexamen economie</h1>
-    <p>Alle hoofdstukken van Pincode in acht werelden, met echte examenvragen. Je oefent op je eigen tempo, net zo lang tot het goed zit.</p>
-    <ul class="usp"><li>8 hoofdstukken</li><li>Echte eindexamenvragen</li><li>Je voortgang blijft bewaard</li></ul></div>${GOLF}</section>
-   <div class="wrap met-voet"><div class="welkom-grid">
-   <div class="kaart"><h3 style="margin-top:0">Ik ben nieuw</h3>
+  return `<section class="foto held" style="${foto('start',1800)}"><div class="in"><div>
+    <span class="eyebrow">Vellesan College · Economie 4 mavo</span>
+    <h1>Oefen slim voor je eindexamen economie</h1>
+    <p>Alle hoofdstukken van Pincode, echte examenvragen en uitleg bij elke fout. Je oefent op je eigen tempo, net zo lang tot het goed zit.</p>
+    <button class="knop groot" onclick="document.getElementById('aanmelden').scrollIntoView({behavior:'smooth'});setTimeout(()=>$('#wNaam').focus(),400)">Start met oefenen</button>
+    <ul class="usp"><li>8 hoofdstukken</li><li>Echte eindexamenvragen</li><li>Je voortgang blijft bewaard</li></ul></div></div></section>
+   <div class="wrap" id="aanmelden" style="max-width:1000px"><div class="welkom-grid">
+   <div class="kaart"><span class="eyebrow" style="color:var(--knop)">Eerste keer</span><h3 style="margin:6px 0 0">Ik ben nieuw</h3>
     <label class="label">Je voor- en achternaam</label><input type="text" id="wNaam" autocomplete="name">
-    <label class="label">Je klas</label><select id="wKlas">${opties}</select>
-    <div class="voet"><button class="knop vol" onclick="nieuwAccount()">Start met oefenen</button></div></div>
-   ${serverModus()?`<div class="kaart"><h3 style="margin-top:0">Ik heb al een account</h3>
-    <p class="zacht" style="margin-top:0">Nieuwe iPad, of de app opnieuw geopend? Vul je speler-ID en herstelcode in. Je voortgang komt terug.</p>
+    <label class="label">Je groep</label><select id="wKlas">${opties}</select>
+    <div class="voet"><button class="knop vol" onclick="nieuwAccount()">Account maken</button></div></div>
+   ${serverModus()?`<div class="kaart"><span class="eyebrow" style="color:var(--knop)">Terugkomen</span><h3 style="margin:6px 0 0">Ik heb al een account</h3>
+    <p class="zacht" style="margin:6px 0 0;font-size:15px">Nieuwe iPad, of de app opnieuw geopend? Vul je speler-ID en herstelcode in. Je voortgang komt terug.</p>
     <label class="label">Speler-ID</label><input type="text" id="hId" autocapitalize="characters" placeholder="bijv. ECON1-K7QD">
     <label class="label">Herstelcode (6 cijfers)</label><input type="text" id="hCode" inputmode="numeric" maxlength="6">
     <div class="voet"><button class="knop zacht vol" onclick="herstelAccount()">Herstel mijn voortgang</button></div></div>`:
    `<div class="kaart"><h3 style="margin-top:0">Testmodus</h3><p class="zacht" style="margin:0">De voortgang staat alleen op dit apparaat.</p></div>`}</div>
-   <p class="zacht mid" style="font-size:14px;margin-top:22px">Tip voor de iPad: open de link in Safari, tik op het deel-icoon en kies "Zet op beginscherm". Open de app daarna altijd vanaf het beginscherm.</p></div>${VOET()}`;
+   <p class="zacht mid" style="font-size:14px;margin-top:24px">Tip voor de iPad: open de link in Safari, tik op het deel-icoon en kies "Zet op beginscherm". Open de app daarna altijd vanaf het beginscherm.</p></div>${VOET()}`;
 },
 code(){
   return `<div class="wrap" style="max-width:560px"><div class="kaart mid"><div class="groot">🔐</div>
@@ -55,52 +65,83 @@ code(){
    <div class="voet" style="justify-content:center"><button class="knop" onclick="go('home')">Ik heb een screenshot gemaakt</button></div></div></div>`;
 },
 home(){
-  const w8=WERELDEN.map(w=>{const st=wereldStand(w.id); const open=!!st;
-    return `<button class="tegel ${open?'':'dicht'}" style="--k:${w.kleur}" onclick="${open?`go('wereld','${w.id}')`:`melding('Hoofdstuk ${w.nr} komt binnenkort')`}">
-      <span class="nr">Hoofdstuk ${w.nr}</span><span class="ic">${w.icoon}</span><h3>${esc(w.naam)}</h3>
-      <p>${open?(st.diploma?'🎓 Diploma behaald':`${st.klaar} van ${st.totaal} levels`):'Binnenkort'}</p>
-      ${open?`<div class="balk"><i style="width:${st.pct}%"></i></div>`:''}</button>`}).join('');
   const exOpen = typeof EXAMEN!=='undefined' && EXAMEN.vragen.length>0;
   const nh=S.herhaal.length;
-  const dipl=WERELDEN.filter(w=>{const st=wereldStand(w.id); return st&&st.diploma}).length;
-  return `<section class="hero"><div class="in"><span class="eyebrow">Economie 4 mavo · ${esc(S.klas||'')}</span>
-    <h1>Hoi ${esc(S.naam.split(' ')[0])}, waar ga je mee verder?</h1>
-    <p>Kies een hoofdstuk, train met echte examenvragen of werk je foute vragen weg.</p>
-    <div class="stats"><div class="stat"><b>⏱️ ${minuten(S.tijd)}</b><small>minuten geoefend</small></div><div class="stat"><b>🎓 ${dipl}/${WERELDEN.length}</b><small>diploma's</small></div><div class="stat"><b>⭐ ${S.xp}</b><small>punten</small></div><div class="stat"><b>🪙 ${munten()}</b><small>munten</small></div></div>
-    <div class="acties">${exOpen?`<button class="knop wit" onclick="go('examen')">🎓 Eindexamentrainer</button>`:''}${nh?`<button class="knop rand" onclick="go('herhaal')">🔁 ${nh} vragen herhalen</button>`:''}</div>
-   </div>${GOLF}</section>
-   <div class="wrap met-voet">
-   <div class="sectie">Hoofdstukken</div><div class="grid">${w8}</div>
-   <div class="sectie">Examen</div><div class="grid">
-    <button class="tegel breed donker ${exOpen?'':'dicht'}" onclick="${exOpen?"go('examen')":"melding('De eindexamentrainer komt binnenkort')"}"><span class="ic">🎓</span><span><h3>Eindexamentrainer</h3><p>Echte examenvragen per jaar en per domein</p></span></button>
-    <button class="tegel breed ${exOpen?'':'dicht'}" style="--k:#171c24" onclick="${exOpen?"startSprint()":"melding('De examensprint komt binnenkort')"}"><span class="ic">⚡</span><span><h3>Examensprint</h3><p>15 examenvragen tegen de klok</p></span></button>
-   </div>
-   <div class="sectie">Slim oefenen</div><div class="grid">
-    <button class="tegel" onclick="go('vaardig')"><span class="ic">📊</span><h3>Vaardigheden</h3><p>Oefen per domein en eindterm</p></button>
-    <button class="tegel" onclick="go('herhaal')"><span class="ic">🔁</span><h3>Herhaalronde</h3><p>${nh?nh+' vragen om opnieuw te doen':'Geen foute vragen, goed bezig!'}</p></button>
-    <button class="tegel" onclick="go('collectie')"><span class="ic">🃏</span><h3>Collectie</h3><p>${S.kaarten.length} begrippenkaarten · ${S.badges.length} badges</p></button>
-    <button class="tegel" style="--k:#5f6570" onclick="go('docent')"><span class="ic">🔑</span><h3>Docent</h3><p>Overzicht van de klas</p></button>
-   </div></div>${VOET()}`;
+  const stand=Object.fromEntries(WERELDEN.map(w=>[w.id,wereldStand(w.id)]));
+  const dipl=WERELDEN.filter(w=>stand[w.id]&&stand[w.id].diploma).length;
+  // waar ging de leerling mee bezig? laatst gespeelde level, anders eerste hoofdstuk zonder diploma
+  const lk=Object.keys(S.lv).filter(k=>!k.startsWith('ex')).pop();
+  let vw=lk?WERELDEN.find(w=>lk.startsWith(w.id+'.')):null; if(vw&&stand[vw.id]&&stand[vw.id].diploma) vw=null;
+  vw=vw||WERELDEN.find(w=>stand[w.id]&&!stand[w.id].diploma)||WERELDEN[0];
+  const vst=stand[vw.id]; const vlvs=LEVELS[vw.id]||[]; const vi=vlvs.findIndex((l,i)=>levelOpen(vw.id,i)&&!(((S.lv[l.id]||{}).best||0)>=MEDAIL[0].min)&&!l.id.endsWith('.r'));
+  const vl=vi>=0?vlvs[vi]:null; const begonnen=vst&&vst.pct>0;
+  const kaarten=WERELDEN.map(w=>{const st=stand[w.id]; const open=!!st;
+    return `<button class="foto fotokaart ${open?'':'dicht'}" style="--k:${w.kleur};${foto(w.id,700)}" onclick="${open?`go('wereld','${w.id}')`:`melding('Hoofdstuk ${w.nr} komt binnenkort')`}">
+      <span class="nr">Hoofdstuk ${w.nr}</span>${open&&st.diploma?'<span class="status">🎓</span>':''}<h3>${esc(w.naam)}</h3>
+      <p>${open?(st.diploma?'Diploma behaald':`${st.klaar} van ${st.totaal} levels · ${st.pct}%`):'Binnenkort'}</p>
+      ${open?`<div class="balk"><i style="width:${st.pct}%"></i></div>`:''}</button>`}).join('');
+  // week-streak
+  const nu=new Date(), ma=new Date(nu); ma.setDate(nu.getDate()-((nu.getDay()+6)%7));
+  const dagId=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+  const dagen=['M','D','W','D','V','Z','Z'].map((l,i)=>{const d=new Date(ma); d.setDate(ma.getDate()+i); const id=dagId(d); const ja=(S.dag||{})[id]>0;
+    return `<span>${l}<i class="${ja?'ja':''} ${id===vandaag()?'nu':''}">${ja?'✓':d.getDate()}</i></span>`}).join('');
+  let streak=0; for(let i=0;i<60;i++){ const id=weekId(new Date(Date.now()-i*7*864e5)); if((S.week||{})[id]>0) streak++; else if(i>0) break; }
+  const ok=exOpen?EXAMEN.vragen.filter(beheerst).length:0;
+  const badges=BADGES.map(b=>`<span class="${S.badges.includes(b.id)?'':'nee'}" title="${esc(b.n)}">${b.i}</span>`).join('');
+  return `<div class="wrap"><div class="dash">
+   <aside class="links">
+    <div class="kaart profielkaart"><div class="bg"></div><div class="avatar">${esc(initialen(S.naam))}</div>
+     <h2>${esc(S.naam)}</h2><div class="klas">${esc(S.klas||'')} · Economie 4 mavo</div>
+     <div class="cijfers"><div><small>Minuten</small><span class="getal">${minuten(S.tijd)}</span></div><div><small>Diploma's</small><span class="getal">${dipl}/${WERELDEN.length}</span></div><div><small>Kaarten</small><span class="getal">${S.kaarten.length}</span></div></div>
+     <div class="blok"><small>Je streak</small><div class="streak"><div class="vlam">🔥<b>${streak}</b>${streak===1?'week':'weken'}</div><div class="dagen">${dagen}</div></div></div>
+     <div class="blok mijlpaal"><small>Punten en munten</small><b>⭐ ${S.xp}</b> &nbsp; <b>🪙 ${munten()}</b></div>
+     <button class="linkrij" onclick="go('vaardig')"><span>Je vaardigheden per domein</span><span>›</span></button></div>
+   </aside>
+   <main>
+    <button class="foto uitgelicht" style="${foto(vw.id,1400)}" onclick="${vl?`startLevel('${vw.id}','${vl.id}')`:`go('wereld','${vw.id}')`}">
+     <span class="eyebrow">${begonnen?'Ga verder':'Begin hier'} · Hoofdstuk ${vw.nr}</span>
+     <h2>${esc(vw.naam)}</h2>
+     <p>${vl?`Volgende level: <b>${esc(vl.naam)}</b> · ${esc(vl.kort)}`:'Bekijk je levels en de eindtoets.'}</p>
+     <span class="knop">${vl?'Verder oefenen':'Naar hoofdstuk '+vw.nr}</span></button>
+    <div class="sectie">Alle hoofdstukken</div>
+    <div class="fotogrid">${kaarten}</div>
+   </main>
+   <aside class="rechts">
+    <div class="kaart"><h3 class="zijkop">Je uitdagingen</h3>
+     ${exOpen?`<button class="uitdaging" onclick="go('examen')"><span class="thumb" style="${foto('examen',200)}"><span>🎓</span></span><span><b>Eindexamentrainer</b><small>${ok} van ${EXAMEN.vragen.length} examenvragen beheerst</small></span></button>
+     <button class="uitdaging" onclick="startSprint()"><span class="thumb" style="${foto('sprint',200)}"><span>⚡</span></span><span><b>Examensprint</b><small>15 vragen tegen de klok · record ${(S.sprint||{}).best||0}</small></span></button>`:''}
+     <button class="uitdaging" onclick="go('herhaal')"><span class="thumb" style="${foto('herhaal',200)}"><span>🔁</span></span><span><b>Herhaalronde</b><small>${nh?nh+' vragen om opnieuw te doen':'Geen foute vragen, goed bezig!'}</small></span></button>
+    </div>
+    <div class="kaart"><h3 class="zijkop">Je badges</h3><div class="badges">${badges}</div>
+     <div class="voet" style="justify-content:flex-start;margin-top:16px"><button class="knop zacht klein" onclick="go('collectie')">Collectie bekijken</button></div></div>
+    <div class="kaart"><h3 class="zijkop" style="margin-bottom:6px">Docent</h3><p class="zacht" style="margin:0 0 12px;font-size:15px">Overzicht van de groep, alleen met docentcode.</p><button class="knop zacht klein" onclick="go('docent')">🔑 Docentendashboard</button></div>
+   </aside>
+  </div></div>${VOET()}`;
 },
 wereld(w){
   const W=WERELDEN.find(x=>x.id===w), lvs=LEVELS[w], st=wereldStand(w);
-  const rijen=lvs.map((l,i)=>{const r=S.lv[l.id]||{}; const open=levelOpen(w,i); const m=r.best!=null?medaille(r.best):null;
-    return `<button class="lv" ${open?`onclick="startLevel('${w}','${l.id}')"`:`onclick="melding('Haal eerst brons in het vorige level')"`}>
-      <span class="med">${open?(m?m.e:'⚪'):'🔒'}</span><span style="flex:1"><b>${esc(l.naam)}</b><small>${esc(l.kort)}${r.best!=null?` · beste: ${r.best}/${VRAGEN_PER_LEVEL}`:''}</small></span><span class="zacht">›</span></button>`}).join('');
   const t=S.toets[w]||{}; const tOpen=toetsOpen(w);
   const kaarten=Object.keys(lvs.begrippen||{}); const heb=kaarten.filter(k=>S.kaarten.includes(k)).length;
-  return `<section class="hero klein" style="--k:${W.kleur}"><div class="in"><div class="rij2"><button class="terug" onclick="go('home')">‹ Alle hoofdstukken</button><span class="chip">🪙 ${munten()}</span><span class="chip">⭐ ${S.xp}</span><span class="chip">⏱️ ${minuten(S.tijd)} min</span></div>
-   <span class="eyebrow" style="margin-top:14px">Hoofdstuk ${W.nr}</span><h1>${W.icoon} ${esc(W.naam)}</h1></div>${GOLF}</section>
-   <div class="wrap" style="--k:${W.kleur}">
-   <div class="kaart" style="margin-bottom:14px"><div class="balk"><i style="width:${st.pct}%"></i></div>
-    <p class="zacht" style="margin:8px 0 0">${st.klaar} van ${st.totaal} levels brons of beter · ${heb} van ${kaarten.length} begrippenkaarten</p></div>
-   <div class="kaart">${rijen}</div>
-   <div class="sectie">Eindtoets</div>
-   <div class="kaart"><div class="rij" style="border:0"><span style="font-size:34px">${t.klaar?'🎓':(tOpen?'📝':'🔒')}</span>
-    <div style="flex:1"><b>Eindtoets H${W.nr}</b><br><small class="zacht">${t.klaar?`Diploma behaald. De eerste keer had je ${t.eerste} van ${TOETS_VRAGEN} goed.`:tOpen?`${TOETS_VRAGEN} vragen uit het hele hoofdstuk. Je oefent door tot alles goed is.`:'Gaat open als je bij alle levels minstens brons hebt.'}</small></div>
-    ${tOpen?`<button class="knop" onclick="startToets('${w}')">${t.klaar?'Opnieuw':'Start'}</button>`:''}</div></div></div>`;
+  const vi=lvs.findIndex((l,i)=>levelOpen(w,i)&&!(((S.lv[l.id]||{}).best||0)>=MEDAIL[0].min)&&!l.id.endsWith('.r')); const vl=vi>=0?lvs[vi]:null;
+  const actie=(l,i)=>levelOpen(w,i)?`startLevel('${w}','${l.id}')`:`melding('Haal eerst brons in het vorige level')`;
+  const paneel=lvs.map((l,i)=>{const r=S.lv[l.id]||{}; const m=r.best!=null?medaille(r.best):null; return `<button onclick="${actie(l,i)}"><span>${levelOpen(w,i)?(m?m.e:'○'):'🔒'}</span><span>${esc(l.naam)}</span></button>`}).join('');
+  const lk=lvs.map((l,i)=>{const r=S.lv[l.id]||{}; const open=levelOpen(w,i); const m=r.best!=null?medaille(r.best):null;
+    return `<button class="levelkaart ${open?'':'dicht'}" onclick="${actie(l,i)}"><span class="boven"><span>${l.id.endsWith('.r')?'Rekenlab':i===0?'Start':'Level '+i}</span><span>${open?(m?m.e:'⚪'):'🔒'}</span></span>
+      <h3>${esc(l.naam)}</h3><p>${esc(l.kort)}</p>
+      <span class="onder"><span>${r.best!=null?`Beste score ${r.best}/${VRAGEN_PER_LEVEL}`:open?'Nog niet gespeeld':'Op slot'}</span><span>${open?(r.best!=null?'Opnieuw ›':'Start ›'):''}</span></span></button>`}).join('');
+  return `<section class="foto held" style="--k:${W.kleur};${foto(w,1800)}"><div class="in">
+    <div class="paneel"><h4>In dit hoofdstuk</h4>${paneel}</div>
+    <div><button class="terug" onclick="go('home')">‹ Alle hoofdstukken</button><br><br>
+     <span class="eyebrow">Hoofdstuk ${W.nr}</span><h1>${esc(W.naam)}</h1>
+     ${vl?`<button class="knop groot" onclick="startLevel('${w}','${vl.id}')">Start: ${esc(vl.naam)}</button>`:tOpen&&!t.klaar?`<button class="knop groot" onclick="startToets('${w}')">Start de eindtoets</button>`:''}</div></div></section>
+   <div class="wrap" style="--k:${W.kleur};padding-top:0">
+    <div class="statstrook"><div><small>Levels brons of beter</small><span class="getal">${st.klaar}/${st.totaal}</span></div><div><small>Voortgang</small><span class="getal">${st.pct}%</span></div><div><small>Begrippenkaarten</small><span class="getal">${heb}/${kaarten.length}</span></div><div><small>Eindtoets</small><span class="getal">${t.klaar?'🎓 Gehaald':tOpen?'Open':'Op slot'}</span></div></div>
+    <div class="sectie">Levels</div><div class="levels">${lk}</div>
+    <div class="toetsblok"><span class="ic">${t.klaar?'🎓':(tOpen?'📝':'🔒')}</span><div style="flex:1"><h3>Eindtoets hoofdstuk ${W.nr}</h3><p>${t.klaar?`Diploma behaald. De eerste keer had je ${t.eerste} van ${TOETS_VRAGEN} goed.`:tOpen?`${TOETS_VRAGEN} vragen uit het hele hoofdstuk. Je oefent door tot alles goed is.`:'Gaat open als je bij alle levels minstens brons hebt.'}</p></div>
+     ${tOpen?`<button class="knop" onclick="startToets('${w}')">${t.klaar?'Opnieuw':'Start'}</button>`:''}</div>
+   </div>${VOET()}`;
 },
-quiz(){ return `<div class="wrap" style="max-width:760px;--k:${Q.kleur||'var(--acc)'}" id="qz"></div>` },
+quiz(){ return `<div class="wrap" style="max-width:860px;--k:${Q.kleur||'var(--acc)'}" id="qz"></div>` },
 quiz_na(){ tekenVraag() },
 resultaat(r){ return r },
 vaardig(){

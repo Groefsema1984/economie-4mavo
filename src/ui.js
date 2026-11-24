@@ -423,7 +423,7 @@ function samenvatLokaal(){ return samenvat(S) }
 function samenvat(s){ // zelfde berekening als op de server
   const dom={}; DOMEINEN.forEach(d=>{ const sc=Object.keys(EINDTERMEN).filter(k=>EINDTERMEN[k].d===d.id).map(k=>{const et=(s.et||{})[k]; if(!et||et.r.length<3) return null; let a=0,w=0; et.r.forEach((x,i)=>{a+=x*(i+1);w+=i+1}); return Math.round(a/w*100)}).filter(x=>x!==null); dom[d.id]=sc.length?Math.round(sc.reduce((a,b)=>a+b,0)/sc.length):null });
   const fout={}; Object.entries(s.vr||{}).forEach(([k,r])=>{ if(r.f) fout[k]=r.f });
-  return {id:s.id,naam:s.naam,klas:s.klas,code:s.code,laatst:s.upd,tijd:s.tijd||0,tijdWeek:(s.week||{})[weekId()]||0,xp:s.xp||0,lv:s.lv||{},toets:s.toets||{},dom,fout,et:s.et||{},vr:s.vr||{},week:s.week||{},dag:s.dag||{},nk:(s.kaarten||[]).length,badges:s.badges||[],sprint:s.sprint||null,herhaal:(s.herhaal||[]).length,aangemaakt:s.aangemaakt||0,munten:(s.mVerd||0)-(s.mUit||0)};
+  return {id:s.id,naam:s.naam,klas:s.klas,code:s.code,laatst:s.upd,tijd:s.tijd||0,tijdWeek:(s.week||{})[weekId()]||0,xp:s.xp||0,lv:s.lv||{},toets:s.toets||{},dom,fout,et:s.et||{},vr:s.vr||{},week:s.week||{},dag:s.dag||{},nk:(s.kaarten||[]).length,badges:s.badges||[],sprint:s.sprint||null,pt:s.pt||{},exr:s.exr||{},kv:s.kv||null,herhaal:(s.herhaal||[]).length,aangemaakt:s.aangemaakt||0,munten:(s.mVerd||0)-(s.mUit||0)};
 }
 async function laadDocent(){ const c=$('#dCode').value.trim(); try{ const j=await api('overzicht',{docentcode:c}); toonDocent(j) }catch(e){ melding(e.message,4000) } }
 let D=null, dKlas='alle', dSort='week';

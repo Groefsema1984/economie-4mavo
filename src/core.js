@@ -119,7 +119,7 @@ async function sync(){
   if(!serverModus()||!S||!S.id||bezig) return; bezig=true;
   try{
     const j = await api('sync',{id:S.id, code:S.code, staat:S});
-    const terug = j.staat; S = mergeStaat(S, terug); S.id=terug.id||S.id; S.code=S.code||terug.code;
+    const terug = j.staat; S = mergeStaat(S, terug); S.id=terug.id||S.id; S.code=S.code||terug.code; if(terug.kmodus!==undefined) S.kmodus=terug.kmodus;
     try{ localStorage.setItem(KEY,JSON.stringify(S)) }catch(e){}
     vuil=false; syncStatus='ok'; syncTijd=Date.now();
   }catch(e){ syncStatus='fout'; syncFout=e.message; planSync(60000) }

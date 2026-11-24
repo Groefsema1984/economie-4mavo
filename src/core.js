@@ -3,7 +3,7 @@
 const DATA_ENDPOINT_URL = "";
 const KLASSEN = ['Econ1','Econ2'];           // klassen waaruit leerlingen kiezen
 const KEY = 'eco4m-v1';                  // opslagsleutel op het apparaat
-const VERSIE = '1.2';
+const VERSIE = '2.0';
 const VRAGEN_PER_LEVEL = 8;
 const MEDAIL = [{n:'brons',e:'🥉',min:6,m:5},{n:'zilver',e:'🥈',min:7,m:10},{n:'goud',e:'🥇',min:8,m:20}];
 const TOETS_VRAGEN = 15;
@@ -11,6 +11,42 @@ const IDLE_MS = 90*1000;                 // na 90 s zonder tikken telt oefentijd
 
 // ===== Hulpfuncties =====
 const $ = (s,el=document)=>el.querySelector(s);
+// Opmaak van vraag-, context- en antwoordtekst: regels met ' | ' worden een tabel, '- …' / '• …' een lijst, de rest alinea's.
+// De opdrachtzin (regel met ►, of Bereken…, Leg uit…) wordt vet.
+const OPDRACHT=/^(►|Bereken|Leg|Verklaar|Toon|Geef|Noem|Beargumenteer|Laat|Bepaal|Licht|Onderbouw|Schrijf|Beschrijf|Welke|Wat|Waarom|Hoe|Is |Zal |Zijn |Heeft |Kies|Vul|Teken|Ga |Maak|Vergelijk)/;
+const NOOT=/^(Opmerking|Aanvulling|indien )/;
+function fmt(t, opdracht){
+  if(t==null||t==='') return ''; const L=String(t).split('\n'); let out='', i=0;
+  const rij=l=>/\S \| \S/.test(l), item=l=>/^\s*[-•−–]\s+/.test(l);
+  while(i<L.length){ const l=L[i];
+    if(rij(l)&&i+1<L.length&&rij(L[i+1])){ const rows=[]; while(i<L.length&&rij(L[i])) rows.push(L[i++].split('|').map(c=>c.trim()));
+      out+=`<div class="vtabel"><table>${rows.map((r,k)=>`<tr>${r.map(c=>k===0?`<th>${esc(c)}</th>`:`<td>${esc(c)}</td>`).join('')}</tr>`).join('')}</table></div>`; continue }
+    if(item(l)){ const it=[]; while(i<L.length&&item(L[i])){ const bol=/^\s*•/.test(L[i]); const x=[L[i++].replace(/^\s*[-•−–]\s+/,'')];
+        // bij '•'-deelscores horen de regels eronder (berekeningen) nog bij hetzelfde punt
+        while(bol&&i<L.length&&L[i].trim()&&!item(L[i])&&!NOOT.test(L[i].trim())&&L[i].trim()!=='of'&&!/\(\dp\)\s*$/.test(x[x.length-1])) x.push(L[i++].trim());
+        it.push(x.map(esc).join('<br>')) }
+      out+=`<ul class="vlijst">${it.map(x=>`<li>${x}</li>`).join('')}</ul>`; continue }
+    const x=l.trim(); i++; if(!x) continue;
+    if(/^(Doe het zo|Puntenverdeling|voorbeeld(en)? van)/.test(x)) out+=`<p class="vkop">${esc(x)}</p>`;
+    else if(NOOT.test(x)) out+=`<p class="vnoot">${esc(x)}</p>`;
+    else if(x.startsWith('► ')) out+=`<p class="vopdracht">${esc(x.slice(2))}</p>`;
+    else out+=`<p${opdracht&&OPDRACHT.test(x)?' class="vopdracht"':''}>${esc(x)}</p>`;
+  }
+  return `<div class="vtekst">${out}</div>`;
+}
+// deelscores uit een antwoordmodel: regels '• … (1p)'; alleen als ze samen precies het maximum geven
+function deelscoresVan(v){ const ds=[];
+  const L=String(v.model||'').split('\n');
+  for(let i=0;i<L.length;i++){ if(!/^\s*•/.test(L[i])) continue; let x=L[i];
+    while(!/\(\dp\)\s*$/.test(x)&&i+1<L.length&&L[i+1].trim()&&!/^\s*[•−–-]\s/.test(L[i+1])&&!NOOT.test(L[i+1].trim())&&L[i+1].trim()!=='of') x+=' '+L[++i].trim();
+    const m=x.match(/^\s*•\s*(.+?)\s*\((\d)p\)\s*$/); if(m) ds.push({t:m[1],p:+m[2]}) }
+  return ds.length>1&&ds.reduce((a,b)=>a+b.p,0)===v.pnt?ds:null }
+// getal waarop een rekenstap uitkomt (na het laatste '='), om in het antwoord van de leerling te zoeken
+const normGetal = x => String(x).replace(/[−–]/g,'-').replace(/(\d)\.(?=\d{3}\b)/g,'$1');
+function uitkomstVan(t){ const m=[...normGetal(t).matchAll(/=\s*(?:€|\$)?\s*(-?\d+(?:,\d+)?)/g)]; return m.length?m[m.length-1][1]:null }
+function bevatGetal(tekst,g){ if(!g||!tekst) return false; const re=new RegExp('(^|[^\\d,])'+g.replace('-','-?').replace(',','[,.]')+'(?![\\d])'); return re.test(normGetal(tekst)) }
+// invulvraag: punten bij het aantal goed gekozen woorden
+const invulPunten = (v,keus) => { const n=v.gaps.filter((g,i)=>keus&&keus[i]===g.a).length; return (v.sc||[])[n]??(n===v.gaps.length?v.pnt:0) };
 const esc = s => String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const rnd = (a,b)=>a+Math.floor(Math.random()*(b-a+1));
 const pick = arr => arr[Math.floor(Math.random()*arr.length)];
@@ -126,6 +162,7 @@ let _vmap=null; function vraagById(id){ if(!_vmap){_vmap={}; for(const v of alle
 function nakijken(v, antw){
   if(v.t==='mc'||v.t==='ex') return antw===v.a;
   if(v.t==='wo') return antw===v.a;
+  if(v.t==='open') return antw===true||(!!antw&&antw.max>0&&antw.p>=antw.max);
   if(v.t==='koppel') return v.p.every((p,i)=>antw[i]===p[1]);
   if(v.t==='reken'){ const x=parseGetal(antw); if(isNaN(x)) return false; const tol = v.eh==='€'?0.011:0.051; return Math.abs(x-v.a)<=tol }
   return false;

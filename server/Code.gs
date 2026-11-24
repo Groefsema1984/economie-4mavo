@@ -13,13 +13,14 @@ const SP_KOP = ['Speler-ID', 'Naam', 'Klas', 'Herstelcode', 'Aangemaakt', 'Laats
   'Oefentijd deze week (min)', 'XP', 'Levels brons+', 'Eindtoetsen klaar', 'Consumptie', 'Arbeid en productie',
   'Overheid', 'Internationaal', 'Rekenen', 'Mislukte herstelpogingen'];
 const DOMEIN_IDS = ['con', 'arb', 'ovh', 'int', 'rek'];
+const DATA_KOL = 8;          // aantal kolommen voor de voortgang per leerling (elk max 45.000 tekens)
 const ET_DOMEIN = {'4A':'con','V1.5':'con','5A':'arb','6.':'ovh','V1.1':'ovh','V1.2':'ovh','V1.3':'ovh','7.':'int','K3':'rek'};
 
 // ---------- Installatie ----------
 function setup() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   const sp = blad_('Spelers', SP_KOP);
-  blad_('Data', ['Speler-ID', 'Bijgewerkt', 'Staat (deel 1)', 'Staat (deel 2)', 'Staat (deel 3)', 'Staat (deel 4)']);
+  blad_('Data', ['Speler-ID', 'Bijgewerkt'].concat([1, 2, 3, 4, 5, 6, 7, 8].map(function (n) { return 'Staat (deel ' + n + ')'; })));
   blad_('Logboek', ['Tijd', 'Speler-ID', 'Naam', 'Klas', 'Actie', 'XP', 'Oefentijd (min)']);
   [sp, ss.getSheetByName('Data'), ss.getSheetByName('Logboek')].forEach(function (b) {
     const p = b.protect().setDescription('Alleen docent en script');
@@ -49,6 +50,7 @@ function doPost(e) {
       case 'herstel': return uit_(herstel_(d));
       case 'sync': return uit_(sync_(d));
       case 'overzicht': return uit_(overzicht_(d));
+      case 'klasmodus': return uit_(klasmodus_(d));
       default: return uit_({ ok: false, fout: 'Onbekende actie' });
     }
   } catch (err) {
@@ -96,6 +98,7 @@ function sync_(d) {
   sp.getRange(r.rij, 6, 1, 11).setValues([[new Date(), Math.round(sam.tijd / 60), Math.round(sam.tijdWeek / 60), sam.xp,
     sam.brons, sam.toetsen, sam.dom.con, sam.dom.arb, sam.dom.ovh, sam.dom.int, sam.dom.rek].map(function (x) { return x === null ? '' : x; })]);
   const terug = JSON.parse(JSON.stringify(nieuw)); terug.code = String(d.code);
+  terug.kmodus = leesKlasModus_()[r.klas] || '';               // oefenmodus die de docent voor de klas heeft gekozen
   return { ok: true, staat: terug };
 }
 
@@ -103,14 +106,25 @@ function overzicht_(d) {
   if (String(d.docentcode) !== String(CFG.DOCENT_CODE)) { Utilities.sleep(1500); throw new Error('Onjuiste docentcode'); }
   const sp = sheet_('Spelers'); const rijen = sp.getLastRow() > 1 ? sp.getRange(2, 1, sp.getLastRow() - 1, 4).getValues() : [];
   const data = {}; const db = sheet_('Data');
-  if (db.getLastRow() > 1) db.getRange(2, 1, db.getLastRow() - 1, 6).getValues().forEach(function (x) {
-    try { data[x[0]] = JSON.parse(String(x[2]) + String(x[3]) + String(x[4]) + String(x[5])); } catch (e) {}
+  if (db.getLastRow() > 1) db.getRange(2, 1, db.getLastRow() - 1, 2 + DATA_KOL).getValues().forEach(function (x) {
+    try { data[x[0]] = JSON.parse(x.slice(2).map(String).join('')); } catch (e) {}
   });
   const spelers = rijen.filter(function (x) { return x[0]; }).map(function (x) {
     const s = data[x[0]] || {}; s.id = x[0]; s.naam = x[1]; s.klas = x[2];
     const sam = samenvat_(s); sam.code = String(x[3]).replace(/^'/, ''); return sam;
   });
-  return { ok: true, spelers: spelers };
+  return { ok: true, spelers: spelers, klasmodus: leesKlasModus_() };
+}
+
+// ---------- Oefenmodus per klas (examen = alleen kernbegrippen, toets = kern en methode) ----------
+function leesKlasModus_() { try { return JSON.parse(PropertiesService.getScriptProperties().getProperty('KLASMODUS') || '{}'); } catch (e) { return {}; } }
+function klasmodus_(d) {
+  if (String(d.docentcode) !== String(CFG.DOCENT_CODE)) { Utilities.sleep(1500); throw new Error('Onjuiste docentcode'); }
+  if (CFG.KLASSEN.indexOf(d.klas) < 0) throw new Error('Onbekende klas');
+  const m = leesKlasModus_();
+  if (d.modus === 'examen' || d.modus === 'toets') m[d.klas] = d.modus; else delete m[d.klas];
+  PropertiesService.getScriptProperties().setProperty('KLASMODUS', JSON.stringify(m));
+  return { ok: true, klasmodus: m };
 }
 
 // ---------- Opslag ----------
@@ -133,16 +147,16 @@ function controleerCode_(r, code) {
 }
 function leesStaat_(id) {
   const db = sheet_('Data'); const ids = kolom_(db, 1); const i = ids.map(function (x) { return String(x).toUpperCase(); }).indexOf(id); if (i < 0) return null;
-  const v = db.getRange(i + 2, 3, 1, 4).getValues()[0];
+  const v = db.getRange(i + 2, 3, 1, DATA_KOL).getValues()[0];
   try { return JSON.parse(v.join('')); } catch (e) { return null; }
 }
 function schrijfStaat_(id, staat) {
   const db = sheet_('Data'); const ids = kolom_(db, 1); let i = ids.indexOf(id);
   const json = JSON.stringify(staat); const N = 45000; const delen = [];
-  for (let k = 0; k < 4; k++) delen.push(json.slice(k * N, (k + 1) * N));
-  if (json.length > 4 * N) throw new Error('Voortgang te groot om op te slaan');
+  for (let k = 0; k < DATA_KOL; k++) delen.push(json.slice(k * N, (k + 1) * N));
+  if (json.length > DATA_KOL * N) throw new Error('Voortgang te groot om op te slaan');
   const rij = [id, new Date()].concat(delen);
-  if (i < 0) db.appendRow(rij); else db.getRange(i + 2, 1, 1, 6).setValues([rij]);
+  if (i < 0) db.appendRow(rij); else db.getRange(i + 2, 1, 1, 2 + DATA_KOL).setValues([rij]);
 }
 function log_(id, naam, klas, actie, xp, min) { sheet_('Logboek').appendRow([new Date(), id, naam, klas, actie, xp, min]); }
 function rndTekst_(n) { const t = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; let s = ''; for (let i = 0; i < n; i++) s += t[Math.floor(Math.random() * t.length)]; return s; }
@@ -196,7 +210,7 @@ function samenvat_(s) {
   return { id: s.id, naam: s.naam, klas: s.klas, laatst: s.upd || 0, tijd: s.tijd || 0, tijdWeek: (s.week || {})[weekId_()] || 0,
     xp: s.xp || 0, lv: lv, toets: toets, dom: dom, fout: fout, et: et,
     vr: s.vr || {}, week: s.week || {}, dag: s.dag || {}, nk: (s.kaarten || []).length, badges: s.badges || [],
-    sprint: s.sprint || null, herhaal: (s.herhaal || []).length, aangemaakt: s.aangemaakt || 0, munten: (s.mVerd || 0) - (s.mUit || 0),
+    sprint: s.sprint || null, pt: s.pt || {}, exr: s.exr || {}, kv: s.kv || null, lmodus: s.lmodus || null, herhaal: (s.herhaal || []).length, aangemaakt: s.aangemaakt || 0, munten: (s.mVerd || 0) - (s.mUit || 0),
     brons: Object.keys(lv).filter(function (k) { return lv[k].best >= 6; }).length,
     toetsen: Object.keys(toets).filter(function (k) { return toets[k].klaar; }).length };
 }

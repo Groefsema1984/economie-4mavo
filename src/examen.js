@@ -13,19 +13,20 @@ let exTab='jaar';
 
 SCHERMEN.examen = function(){
   const tot=EXAMEN.vragen.length, ok=EXAMEN.vragen.filter(beheerst).length;
-  const tabs=[['jaar','Per examen'],['domein','Per domein'],['print','Printen']].map(([k,t])=>`<button class="knop ${exTab===k?'':'zacht'}" onclick="exTab='${k}';go('examen')">${t}</button>`).join('');
+  const tabs=[['jaar','Per examen'],['domein','Per domein'],['tijd','Examen op tijd'],['print','Printen']].map(([k,t])=>`<button class="knop ${exTab===k?'':'zacht'}" onclick="exTab='${k}';go('examen')">${t}</button>`).join('');
   let inhoud='';
-  if(exTab==='jaar') inhoud=`<div class="kaart">${exLijst().map(({c,v})=>{const b=v.filter(beheerst).length; return `<button class="lv" onclick="startExamen('${c}')"><span class="med">${b===v.length?'🏆':'📄'}</span><span style="flex:1"><b>Examen ${exNaam(c)}</b><small>${v.length} meerkeuzevragen · ${b} beheerst</small><div class="balk" style="margin-top:6px"><i style="width:${Math.round(b/v.length*100)}%"></i></div></span><span class="zacht">›</span></button>`}).join('')}</div>`;
+  if(exTab==='jaar') inhoud=`<div class="kaart">${exLijst().map(({c,v})=>{const b=v.filter(beheerst).length; return `<button class="lv" onclick="startExamen('${c}')"><span class="med">${b===v.length?'🏆':'📄'}</span><span style="flex:1"><b>Examen ${exNaam(c)}</b><small>${v.length} vragen (${v.filter(x=>x.t==='ex').length} meerkeuze) · ${b} beheerst</small><div class="balk" style="margin-top:6px"><i style="width:${Math.round(b/v.length*100)}%"></i></div></span><span class="zacht">›</span></button>`}).join('')}</div>`;
   else if(exTab==='domein') inhoud=`<div class="kaart">${DOMEINEN.filter(d=>d.id!=='rek').map(d=>{const v=EXAMEN.vragen.filter(x=>x.d===d.id); const b=v.filter(beheerst).length; return `<button class="lv" onclick="startExDomein('${d.id}')"><span class="med">${d.icoon}</span><span style="flex:1"><b>${d.naam}</b><small>${v.length} vragen · ${b} beheerst · 10 per ronde, je zwakke vragen eerst</small><div class="balk" style="margin-top:6px"><i style="width:${Math.round(b/v.length*100)}%;background:${d.kleur}"></i></div></span><span class="zacht">›</span></button>`}).join('')}
      <button class="lv" onclick="startExMix()"><span class="med">🎲</span><span style="flex:1"><b>Alles door elkaar</b><small>10 willekeurige examenvragen</small></span><span class="zacht">›</span></button></div>`;
-  else inhoud=`<div class="kaart"><p style="margin-top:0">Kies wat je wilt printen. Je krijgt de meerkeuzevragen met de examenpagina's en bronnen, een antwoordblad en een antwoordenlijst voor de docent.</p>
+  else if(exTab==='tijd') inhoud=exTijdLijst();
+  else inhoud=`<div class="kaart"><p style="margin-top:0">Kies wat je wilt printen. Je krijgt de vragen met de examenpagina's en bronnen, en met het vinkje ook de antwoorden en het antwoordmodel voor de docent.</p>
      <label class="label">Examen</label><select id="prSel"><option value="">Alle examens per domein…</option>${exLijst().map(({c,v})=>`<option value="${c}">Examen ${exNaam(c)} (${v.length} vragen)</option>`).join('')}</select>
      <label class="label">Of een domein</label><select id="prDom"><option value="">–</option>${DOMEINEN.filter(d=>d.id!=='rek').map(d=>`<option value="${d.id}">${d.naam}</option>`).join('')}</select>
      <label class="label"><input type="checkbox" id="prAntw"> Antwoorden toevoegen (docentversie)</label>
      <div class="voet"><button class="knop" onclick="printExamen()">Maak printversie</button></div></div>`;
   return `<div class="wrap">${kop('Eindexamentrainer',"go('home')")}
    <div class="kaart" style="margin-bottom:14px"><b>${ok} van ${tot}</b> examenvragen beheerst<div class="balk" style="margin-top:8px"><i style="width:${Math.round(ok/tot*100)}%"></i></div>
-   <p class="zacht" style="margin:8px 0 0;font-size:14px">Echte meerkeuzevragen uit de centrale examens economie GL/TL van 2018 tot en met 2026. Een vraag is beheerst als je hem vaker goed dan fout hebt. Sprintrecord: ${(S.sprint||{}).best||0} van 15.</p></div>
+   <p class="zacht" style="margin:8px 0 0;font-size:14px">Alle vragen uit de centrale examens economie GL/TL van 2018 tot en met 2026: meerkeuze, invulvragen en open vragen met het antwoordmodel. Open vragen kijk je zelf na. Een vraag is beheerst als je hem vaker goed dan fout hebt. Sprintrecord: ${(S.sprint||{}).best||0} van 15.</p></div>
    <div class="voet" style="justify-content:flex-start;margin-bottom:12px">${tabs}<button class="knop zacht" onclick="startSprint()">⚡ Examensprint</button></div>${inhoud}</div>`;
 };
 
@@ -36,7 +37,7 @@ function startExDomein(d){ exSet(zwakFirst(EXAMEN.vragen.filter(v=>v.d===d)).sli
 function startExMix(){ exSet(shuffle(EXAMEN.vragen).slice(0,10),'Examenvragen door elkaar') }
 let sprintTimer=null;
 function startSprint(){
-  exSet(shuffle(EXAMEN.vragen).slice(0,15),'Examensprint',{modus:'sprint',eind:Date.now()+20*60*1000});
+  exSet(shuffle(EXAMEN.vragen.filter(autoNakijk)).slice(0,15),'Examensprint',{modus:'sprint',eind:Date.now()+20*60*1000});
   clearInterval(sprintTimer); sprintTimer=setInterval(()=>{ if(scherm!=='quiz'||Q.modus!=='sprint'){clearInterval(sprintTimer);return}
     const s=Math.max(0,Math.round((Q.eind-Date.now())/1000)); const el=$('#klok'); if(el) el.textContent=`⏱️ ${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`;
     if(s<=0){ clearInterval(sprintTimer); while(Q.res.length<Q.vragen.length){ Q.res.push(false) } klaar() } },1000);
@@ -48,17 +49,17 @@ tekenVraag = function(){
   _tekenVraag();
   const v=Q.vragen[Q.i];
   if(Q.modus==='sprint'){ const t=$('#qz .top .chip'); if(t) t.insertAdjacentHTML('beforebegin','<span class="chip" id="klok">⏱️</span>') }
-  if(v.t!=='ex') return;
+  if(!v.ex) return;
   const kaart=$('#qz .kaart');
   const kopTxt=`<p class="zacht" style="margin-top:0;font-size:13px">Examen ${v.jaar} tijdvak ${v.tv} · vraag ${v.nr}${v.titel?' · '+esc(v.titel):''}</p>`;
-  const oud=kaart.querySelector(':scope > p.zacht'); if(oud&&v.ctx) oud.remove();
-  const ctx=v.ctx?`<p style="font-size:15px;white-space:pre-line;background:var(--bg);border-radius:12px;padding:10px 12px">${esc(v.ctx)}</p>`:'';
+  const oud=kaart.querySelector(':scope > .vctx'); if(oud) oud.remove();
+  const ctx=v.ctx?`<div style="font-size:15px;background:var(--bg);border-radius:12px;padding:10px 12px;margin-bottom:10px">${fmt(v.ctx)}</div>`:'';
   const imgs=(v.img||[]).map((s,i)=>`<button class="knop zacht" style="min-height:40px;padding:6px 12px;font-size:14px" onclick="toonImg('${s}')">${s.includes('-b-')?'📊 Informatiebron':'📄 Examenpagina'}</button>`).join(' ');
   kaart.insertAdjacentHTML('afterbegin',kopTxt+ctx+(imgs?`<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px">${imgs}</div><div id="imgBox"></div>`:''));
-  $('#qz .vraag').style.whiteSpace='pre-line';
+  if(v.t==='ex') $('#qz .vraag').style.whiteSpace='pre-line';
   // toon bij een bron-vraag direct de eerste informatiebron, anders de examenpagina als er een figuur in staat
-  const bron=(v.img||[]).find(s=>s.includes('-b-')); const fig=/grafiek|figuur|tabel|afbeelding|hieronder|lijn |oppervlakte|curve/i.test(v.q+' '+v.o.join(' '));
-  if(bron) toonImg(bron); else if(fig) toonImg(v.img[0]);
+  const bron=(v.img||[]).find(s=>s.includes('-b-')); const fig=/grafiek|figuur|tabel|afbeelding|hieronder|bovenstaand|lijn |oppervlakte|curve/i.test(v.q+' '+(v.o||[]).join(' ')+' '+(v.ctx||''));
+  if(bron) toonImg(bron); else if(fig&&v.img&&v.img.length) toonImg(v.img[0]);
 };
 function toonImg(s){ const b=$('#imgBox'); if(!b) return; if(b.dataset.s===s){ b.innerHTML=''; b.dataset.s=''; return }
   b.dataset.s=s; b.innerHTML=`<div style="overflow:auto;max-height:70vh;border:1px solid var(--lijn);border-radius:12px;margin-bottom:12px;background:#fff"><img src="${EX_IMG}${s}.jpg" alt="Examenpagina" style="width:100%;display:block" onerror="this.parentNode.innerHTML='<p style=&quot;padding:12px&quot;>Afbeelding niet beschikbaar zonder internet.</p>'"></div>` }
@@ -75,7 +76,7 @@ function printExamen(){
   const c=$('#prSel').value, d=$('#prDom').value, antw=$('#prAntw').checked;
   let v = c ? EXAMEN.vragen.filter(x=>x.ex===c).sort((a,b)=>a.nr-b.nr) : d ? EXAMEN.vragen.filter(x=>x.d===d).sort((a,b)=>a.ex<b.ex?-1:a.ex>b.ex?1:a.nr-b.nr) : null;
   if(!v){ melding('Kies een examen of een domein'); return }
-  const titel = c ? 'Examen economie GL/TL '+exNaam(c)+' · meerkeuzevragen' : 'Examenvragen '+DOMEINEN.find(x=>x.id===d).naam;
+  const titel = c ? 'Examen economie GL/TL '+exNaam(c) : 'Examenvragen '+DOMEINEN.find(x=>x.id===d).naam;
   const imgs=[...new Set(v.flatMap(x=>x.img||[]))];
   const w=window.open('','_blank'); if(!w){ melding('Sta pop-ups toe om te printen'); return }
   const L='ABCDE';
@@ -85,9 +86,9 @@ function printExamen(){
    .pb{break-before:page} table{border-collapse:collapse} td,th{border:1px solid #999;padding:4px 10px}
    .knop{position:fixed;top:10px;right:10px;padding:10px 16px;font-size:16px} @media print{.knop{display:none}}</style></head><body>
    <button class="knop" onclick="print()">Printen</button><h1>${esc(titel)}</h1><p>Naam: ______________________ Klas: ______ </p>
-   ${v.map((x,i)=>`<div class="v"><b>${i+1}. (${x.jaar} tv${x.tv}, vraag ${x.nr}${x.titel?' · '+esc(x.titel):''})</b>${x.ctx?`<div class="ctx">${esc(x.ctx)}</div>`:''}<div style="white-space:pre-line">${esc(x.q)}</div>${x.o.map((o,k)=>`<div class="o">${L[k]}&nbsp; ${esc(o)}</div>`).join('')}</div>`).join('')}
+   ${v.map((x,i)=>`<div class="v"><b>${i+1}. (${x.jaar} tv${x.tv}, vraag ${x.nr}${x.titel?' · '+esc(x.titel):''})</b>${x.ctx?`<div class="ctx">${esc(x.ctx)}</div>`:''}<div style="white-space:pre-line">${esc(x.q.replace(/^► /gm,''))}</div>${x.t==='ex'?x.o.map((o,k)=>`<div class="o">${L[k]}&nbsp; ${esc(o)}</div>`).join(''):`<div class="ctx">(${x.pnt} punt${x.pnt>1?'en':''})</div>`}</div>`).join('')}
    <div class="pb"><h1>Examenpagina's en informatiebronnen</h1>${imgs.map(s=>`<p style="font-size:12px;margin:12px 0 0">${s.replace('-o-',' · examen p. ').replace('-b-',' · bijlage p. ')}</p><img src="${location.href.replace(/[^/]*$/,'')}${EX_IMG}${s}.jpg">`).join('')}</div>
-   <div class="pb"><h1>Antwoordblad</h1><table><tr><th>Vraag</th><th>Antwoord</th></tr>${v.map((x,i)=>`<tr><td>${i+1}</td><td style="width:120px">${antw?L[x.a]:''}</td></tr>`).join('')}</table></div>
+   <div class="pb"><h1>Antwoordblad</h1><table><tr><th>Vraag</th><th>Antwoord</th></tr>${v.map((x,i)=>`<tr><td>${i+1}</td><td style="min-width:320px;white-space:pre-line;${antw?'':'height:'+(x.t==='ex'?24:60*(x.pnt||1))+'px'}">${antw?(x.t==='ex'?L[x.a]:esc(x.model||'')):''}</td></tr>`).join('')}</table></div>
    </body></html>`);
   w.document.close();
 }

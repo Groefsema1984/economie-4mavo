@@ -1,23 +1,64 @@
 # Handleiding docent · Economie 4 MAVO oefenapp
 
-## Wat zit erin (versie 1.0)
+## Wat zit erin (versie 2.0)
 
-- Startscherm met 8 hoofdstukwerelden (H1 t/m H8), allemaal speelbaar, plus de Eindexamentrainer met 183 meerkeuzevragen (2018-2026) per examen, per domein, als sprint en om te printen.
-- Per paragraaf een level van 8 vragen (meerkeuze, waar/niet waar, koppelen, rekenen met steeds nieuwe getallen).
-  Medailles: brons 6/8, zilver 7/8, goud 8/8. Het volgende level gaat open bij brons.
-- Eindtoets per hoofdstuk (15 vragen) zonder cijfer: de leerling ziet hoeveel goed en wat nog geoefend moet worden,
-  en maakt de foute vragen opnieuw tot alles goed is. Dan volgt het diploma.
+Nergens in de app staan cijfers. Leerlingen zien alleen hoeveel ze goed hebben (of hoeveel punten) en wat ze nog moeten oefenen.
+
+**Oefenen per hoofdstuk**
+- Startscherm met 8 hoofdstukwerelden (H1 t/m H8). Per paragraaf een level van 8 vragen (meerkeuze, waar/niet waar,
+  koppelen, rekenen met steeds nieuwe getallen). Medailles: brons 6/8, zilver 7/8, goud 8/8.
+- Voor elk level staat eerst een korte uitleg met de belangrijkste begrippen (de eerste keer automatisch, daarna via de knop).
+- Per hoofdstuk een extra level **Examenbegrippen** met begrippen die in het examen voorkomen maar nog niet in de levels zaten.
+- Eindtoets per hoofdstuk (15 vragen): aantal goed en wat nog oefenen, foute vragen opnieuw tot alles goed is. Dan volgt het diploma.
+
+**Leren (nieuw menu)**
+- **Slim oefenen**: de app kiest zelf vragen uit de zwakste onderwerpen. Bij een fout volgt soms een steunvraag.
+- **Flitskaarten**: begrippen met herhaling op slimme momenten (na 1, 3, 7, 14, 30 en 60 dagen).
+- **Foutenschrift**: alle fout gemaakte vragen per onderwerp, met uitleg.
+- **Formulekaart**: de 19 formules die mavo-leerlingen moeten kennen, met rekenregels.
+- **Grafiektraining**: klikken in grafieken (evenwicht, vraag- en aanbodlijn, verschuivingen, maximum- en minimumprijs, Lorenzcurve).
+- **Proeftoets per hoofdstuk**: 15 vragen op tijd (ongeveer 1 minuut per vraag), pas aan het eind zien wat goed was.
+
+**Eindexamentrainer**
+- Alle vragen uit de centrale examens 2018-2026 (eerste en tweede tijdvak): meerkeuze én open vragen, met de bronnen
+  als afbeelding. Per examen, per domein, als sprint (alleen automatisch nakijkbare vragen) en om te printen
+  (leerlingversie en docentversie met correctievoorschrift).
+- Open vragen kijkt de leerling zelf na met het correctievoorschrift. Bij rekenvragen en invulvragen kijkt de app
+  zelf na waar dat kan; anders geeft de leerling zichzelf de punten per deelscore.
+- **Examen op tijd**: een heel examen in 120 minuten. De uitslag toont punten per domein en wat nog oefenen. Geen cijfer.
+
+**Kern, methode en verdieping**
+- Elk begrip hoort bij een laag: 🎯 kern (examenstof), 📘 methode (nodig voor de schooltoets) of 🔭 verdieping (extra).
+  De indeling komt uit de analyse van de examens 2018-2026 en staat in `src/lagen.txt`.
+- **Toetsmodus** (standaard): kern en methode. **Examenmodus**: alleen kernbegrippen. Verdieping zet de leerling zelf aan.
+- Je stelt de modus per klas in op het tabblad *Klassikaal* in het docentenscherm. Leerlingen kunnen het zelf nog aanpassen.
+- Een begrip naar een andere laag zetten: pas de regel `begrip = k` (of `m`, `v`) aan in `src/lagen.txt` en laat Claude de app opnieuw bouwen.
+
+**Overig**
 - Vaardigheden: score 0–100 per eindterm en domein (Consumptie, Arbeid en productie, Overheid, Internationaal, Rekenen).
 - Herhaalronde: foute vragen komen terug tot ze twee keer goed zijn gemaakt.
-- Collectie: begrippenkaarten, badges, munten en kleurthema's.
-- Docentendashboard (tegel "Docent", haalt alles live op uit je Google Sheet via de server):
-  - Overzicht: kerncijfers, oefentijd per week en per dag, scores per domein, voortgang per wereld, en wie aandacht nodig heeft.
-  - Leerlingen: sorteerbare tabel. Klik op een naam voor alles van die leerling: oefentijd, medailles per level,
-    eindtoetsen, scores per eindterm, de vragen die het vaakst fout gingen en de examentrainer per examen.
-  - Vragen: de moeilijkste vragen van de groep (percentage fout), per wereld te filteren, plus de rekensommen.
-  - Eindtermen: kleurentabel van alle leerlingen per eindterm, en de eindtermen van zwak naar sterk.
-  - Examentrainer: per leerling en per examen hoeveel vragen beheerst zijn, en het sprintrecord.
-  - Filter op Econ1 of Econ2, vernieuwen, CSV voor Excel en afdrukken.
+- Collectie: begrippenkaarten, badges, munten en kleurthema's. Ranglijst op geoefende tijd.
+
+**Docentendashboard** (tegel "Docent", haalt alles live op uit je Google Sheet via de server)
+- Overzicht: oefentijd per week en per dag, scores per domein, voortgang per wereld, en wie aandacht nodig heeft.
+- Leerlingen: sorteerbare tabel. Klik op een naam voor alles van die leerling, ook het foutenschrift, de proeftoetsen
+  en de examens op tijd.
+- **Klassikaal** (nieuw): de zwakste onderwerpen van de klas (met de namen van wie nog onder de 50 zit), de vragen die
+  veel leerlingen fout hadden, de proeftoetsen (gemiddeld aantal goed), examens op tijd (punten), de oefenmodus per klas
+  en hoeveel procent van de kernbegrippen de klas al beheerst.
+- Vragen, Eindtermen en Examentrainer zoals voorheen.
+- Filter op Econ1 of Econ2, vernieuwen, CSV voor Excel en afdrukken.
+
+### Nieuwe server-code zetten (nodig voor versie 2.0)
+
+Versie 2.0 bewaart meer per leerling en kent de instelling "oefenmodus per klas". Zet daarom één keer de nieuwe code online:
+
+1. Open je spreadsheet "Economie 4M – server" en kies **Extensies > Apps Script**.
+2. Vervang alle code door de inhoud van `server/Code.gs` en klik op Opslaan.
+3. Kies de functie **setup** en klik op **Uitvoeren** (dit voegt de extra kolommen in het tabblad Data toe; er gaat niets verloren).
+4. **Implementeren > Implementaties beheren > potlood > Versie: Nieuwe versie > Implementeren.** De URL blijft gelijk.
+
+Tot je dit doet werkt de app gewoon, maar kun je de oefenmodus per klas nog niet instellen.
 
 ## Zo raakt er niets kwijt
 

@@ -17,8 +17,8 @@ function nav(){
   const m=$('#menu'), p=$('#profiel'); if(!m) return;
   if(!S||!S.naam||scherm==='quiz'||scherm==='welkom'){ m.innerHTML=''; p.innerHTML=''; return }
   const exOpen=typeof EXAMEN!=='undefined'&&EXAMEN.vragen.length>0;
-  const items=[['home','Start'],exOpen?['examen','Eindexamen']:null,['vaardig','Vaardigheden'],['herhaal','Herhalen'+(S.herhaal.length?` (${S.herhaal.length})`:'')],['collectie','Collectie'],['account','Account']].filter(Boolean);
-  const actief=scherm==='wereld'||scherm==='resultaat'?'home':scherm;
+  const items=[['home','Start'],exOpen?['examen','Eindexamen']:null,['leren','Leren'],['vaardig','Vaardigheden'],['herhaal','Herhalen'+(S.herhaal.length?` (${S.herhaal.length})`:'')],['collectie','Collectie'],['account','Account']].filter(Boolean);
+  const actief=scherm==='wereld'||scherm==='resultaat'||scherm==='uitleg'?'home':['flits','flitsen','fouten','formules','proef','exvol'].includes(scherm)?(scherm==='exvol'?'examen':'leren'):scherm;
   m.innerHTML=items.map(([s,t])=>`<button class="${actief===s?'aan':''}" onclick="go('${s}')">${t}</button>`).join('');
   p.innerHTML=`<button class="profiel" onclick="go('account')"><span class="avatar">${esc(initialen(S.naam))}</span><span>${esc(S.naam)}</span></button>`+(exOpen?`<button class="ikoonknop" onclick="startSprint()">⚡<span class="t">Sprint</span></button>`:'');
 }
@@ -110,6 +110,8 @@ home(){
     <div class="kaart"><h3 class="zijkop">Je uitdagingen</h3>
      ${exOpen?`<button class="uitdaging" onclick="go('examen')"><span class="thumb" style="${foto('examen',200)}"><span>🎓</span></span><span><b>Eindexamentrainer</b><small>${ok} van ${EXAMEN.vragen.length} examenvragen beheerst</small></span></button>
      <button class="uitdaging" onclick="startSprint()"><span class="thumb" style="${foto('sprint',200)}"><span>⚡</span></span><span><b>Examensprint</b><small>15 vragen tegen de klok · record ${(S.sprint||{}).best||0}</small></span></button>`:''}
+     <button class="uitdaging" onclick="startSlim()"><span class="thumb" style="${foto('vaardig',200)}"><span>🎯</span></span><span><b>Slim oefenen</b><small>Extra vragen over je zwakste onderwerpen</small></span></button>
+     <button class="uitdaging" onclick="go('flits')"><span class="thumb" style="${foto('collectie',200)}"><span>🃏</span></span><span><b>Flitskaarten</b><small>${(()=>{const n=fkDue().length; return n?n+' begrippen om nu te herhalen':'Leer de begrippen met herhaling op afstand'})()}</small></span></button>
      <button class="uitdaging" onclick="go('herhaal')"><span class="thumb" style="${foto('herhaal',200)}"><span>🔁</span></span><span><b>Herhaalronde</b><small>${nh?nh+' vragen om opnieuw te doen':'Geen foute vragen, goed bezig!'}</small></span></button>
     </div>
     <div class="kaart"><h3 class="zijkop">Je badges</h3><div class="badges">${badges}</div>
@@ -141,6 +143,11 @@ wereld(w){
      ${tOpen?`<button class="knop" onclick="startToets('${w}')">${t.klaar?'Opnieuw':'Start'}</button>`:''}</div>
    </div>${VOET()}`;
 },
+uitleg(a){ const l=LEVELS[a.w].find(x=>x.id===a.lid); const W=WERELDEN.find(x=>x.id===a.w);
+  return `<div class="wrap" style="max-width:760px;--k:${W.kleur}">${kop(esc(l.naam),`go('wereld','${a.w}')`)}<div class="kaart"><span class="eyebrow" style="color:var(--zacht)">Eerst even de uitleg · Hoofdstuk ${W.nr}</span>
+   ${l.uitleg.map(u=>`<div style="border-top:1px solid var(--lijn);padding:12px 0"><b>${esc(u.t)}</b><div style="white-space:pre-line;margin-top:4px">${esc(u.x)}</div></div>`).join('')}
+   <div class="voet"><button class="knop zacht" onclick="go('wereld','${a.w}')">Terug</button><button class="knop" onclick="startLevel('${a.w}','${a.lid}',true)">Ik snap het, start het level</button></div></div></div>${VOET()}`;
+},
 quiz(){ return `<div class="wrap" style="max-width:860px;--k:${Q.kleur||'var(--acc)'}" id="qz"></div>` },
 quiz_na(){ tekenVraag() },
 resultaat(r){ return r },
@@ -153,7 +160,8 @@ vaardig(){
        return `<button class="lv" onclick="startEindterm('${k}')"><span class="med" style="font-size:14px;color:${c}">●</span><span style="flex:1"><b style="font-weight:600">${esc(EINDTERMEN[k].t)}</b><small>${s==null?'Nog niet genoeg geoefend':'Score '+s}</small></span><span class="zacht">›</span></button>`}).join('');
     return `<div class="kaart" style="margin-bottom:12px"><div class="domein" style="border:0"><span style="font-size:26px">${d.icoon}</span><div><b>${d.naam}</b><div class="balk" style="margin-top:6px"><i style="width:${sc||0}%;background:${kl}"></i></div></div><span class="pct">${sc==null?'–':sc}</span></div>
      ${n?`<button class="knop zacht vol" style="margin:6px 0" onclick="startDomein('${d.id}')">Oefen ${d.naam.toLowerCase()}</button>`:'<p class="zacht" style="margin:4px 0">Komt erbij met de volgende hoofdstukken.</p>'}${sub}</div>`}).join('');
-  return `<div class="wrap">${kop('Vaardigheden','go(\'home\')')}<p class="zacht">Je score per onderdeel telt je laatste 20 antwoorden. Recente antwoorden tellen zwaarder. Groen is 75 of hoger.</p>${doms}</div>`;
+  return `<div class="wrap">${kop('Vaardigheden','go(\'home\')')}<div class="kaart" style="margin-bottom:12px"><b>🎯 Slim oefenen</b><p class="zacht" style="margin:4px 0 8px">10 vragen uit de onderwerpen waar je het zwakst op scoort, plus een paar foute vragen uit je herhaalronde. Heb je een vraag fout, dan krijg je een extra vraag over hetzelfde onderwerp.</p><button class="knop" onclick="startSlim()">Start slim oefenen</button></div>
+  <p class="zacht">Je score per onderdeel telt je laatste 20 antwoorden. Recente antwoorden tellen zwaarder. Groen is 75 of hoger.</p>${doms}</div>`;
 },
 herhaal(){
   const n=S.herhaal.length;
@@ -246,10 +254,10 @@ function vragenVoorLevel(l){
   else { const nGen=Math.min(gens.length?2:0,VRAGEN_PER_LEVEL); set=vaste.slice(0,VRAGEN_PER_LEVEL-nGen).concat(Array.from({length:nGen},()=>maakGen(pick(gens)))); }
   return shuffle(set);
 }
-function startLevel(w,lid){ const l=LEVELS[w].find(x=>x.id===lid); const W=WERELDEN.find(x=>x.id===w);
+function startLevel(w,lid,direct){ const l=LEVELS[w].find(x=>x.id===lid); if(l.uitleg&&l.uitleg.length&&!direct&&!((S.lv[lid]||{}).n)){ go('uitleg',{w,lid}); return } const W=WERELDEN.find(x=>x.id===w);
   Q={modus:'level',titel:l.naam,w,lid,kleur:W.kleur,vragen:vragenVoorLevel(l),i:0,res:[],terug:`go('wereld','${w}')`}; go('quiz') }
 function startToets(w){ const W=WERELDEN.find(x=>x.id===w); const lvs=LEVELS[w].filter(l=>l.vragen.length);
-  let pool=[]; lvs.forEach(l=>pool.push(...shuffle(l.vragen).slice(0,3).map(v=>Object.assign({l:l.id},v)))); pool=shuffle(pool).slice(0,TOETS_VRAGEN-2);
+  let pool=[]; lvs.forEach(l=>pool.push(...shuffle(l.vragen.filter(autoNakijk)).slice(0,3).map(v=>Object.assign({l:l.id},v)))); pool=shuffle(pool).slice(0,TOETS_VRAGEN-2);
   const gens=[...new Set(LEVELS[w].flatMap(l=>l.gens||[]))]; pool.push(maakGen(pick(gens)),maakGen(pick(gens)));
   Q={modus:'toets',titel:`Eindtoets H${W.nr}`,w,kleur:W.kleur,vragen:shuffle(pool),i:0,res:[],ronde:1,terug:`go('wereld','${w}')`}; go('quiz') }
 function startHerhaal(){ const v=shuffle(S.herhaal).slice(0,10).map(vraagById).filter(Boolean); if(!v.length){go('herhaal');return}
@@ -264,38 +272,98 @@ function startDomein(d){ const ets=Object.keys(EINDTERMEN).filter(k=>EINDTERMEN[
   if(!v.length){melding('Hier zijn nog geen vragen voor');return}
   const D=DOMEINEN.find(x=>x.id===d); Q={modus:'domein',titel:D.naam,kleur:D.kleur,vragen:shuffle(v),i:0,res:[],terug:"go('vaardig')"}; go('quiz') }
 
+// ===== Adaptief oefenen =====
+// Na een fout antwoord krijgt de leerling een extra vraag over hetzelfde onderwerp (steunvraag), maximaal 3 per ronde.
+// Steunvragen tellen niet mee voor de medaille van een level, wel voor de vaardigheidsscore.
+const STEUN_MAX=3, STEUN_MODI=['level','et','domein','herhaal','slim'];
+const autoNakijk = v => ['mc','wo','ex','reken','koppel'].includes(v.t)||(v.t==='open'&&!!v.gaps);
+function steunvraag(v){
+  if(!Q||!STEUN_MODI.includes(Q.modus)||!v.e||(Q.nSteun||0)>=STEUN_MAX) return;
+  const al=new Set(Q.vragen.map(x=>x.id));
+  const recentGoed=x=>{const r=S.vr[x.id]; return r&&r.g>0&&r.t&&Date.now()-r.t<3*864e5};
+  let kand=alleVragen().filter(x=>x.e===v.e&&autoNakijk(x)&&!al.has(x.id));
+  kand=shuffle(kand).sort((a,b)=>(recentGoed(a)?1:0)-(recentGoed(b)?1:0));
+  let nw=kand[0];
+  if(!nw){ const g=Object.keys(GENS).filter(n=>{try{return maakGen(n).e===v.e}catch(e){return false}}); if(g.length) nw=maakGen(pick(g)) }
+  if(!nw) return;
+  nw=Object.assign({},nw,{_steun:true}); delete nw._mix;
+  Q.vragen.splice(Math.min(Q.i+2,Q.vragen.length),0,nw); Q.nSteun=(Q.nSteun||0)+1;
+  const fb=$('#fb'); if(fb) fb.insertAdjacentHTML('beforeend',`<p class="zacht" style="font-size:14px;margin:6px 0 0">➕ Je krijgt zo een extra vraag over ${esc((EINDTERMEN[v.e]||{}).t||'dit onderwerp')}.</p>`);
+}
+// Slim oefenen: 10 vragen uit de onderwerpen waar de leerling het zwakst op scoort (plus foute vragen uit de herhaalronde)
+function zwaksteOnderwerpen(n){
+  const metVragen=new Set(alleVragen().filter(x=>autoNakijk(x)&&x.e).map(x=>x.e));
+  const gespeeld=Object.keys(S.et).filter(k=>metVragen.has(k)&&EINDTERMEN[k]);
+  return gespeeld.map(k=>[k,etScore(k)??60]).filter(x=>x[1]<80).sort((a,b)=>a[1]-b[1]).slice(0,n).map(x=>x[0]);
+}
+function startSlim(){
+  const ets=zwaksteOnderwerpen(4);
+  let v=S.herhaal.map(vraagById).filter(x=>x&&autoNakijk(x)); v=shuffle(v).slice(0,3);
+  const al=new Set(v.map(x=>x.id));
+  ets.forEach((k,i)=>{ const per=i===0?3:2; shuffle(alleVragen().filter(x=>x.e===k&&autoNakijk(x)&&!al.has(x.id))).slice(0,per).forEach(x=>{v.push(x);al.add(x.id)}) });
+  if(v.length<5){ melding('Oefen eerst een paar levels. Daarna weet de app waar je extra oefening nodig hebt.',4000); return }
+  Q={modus:'slim',titel:'Slim oefenen',vragen:shuffle(v).slice(0,10),i:0,res:[],terug:"go('vaardig')"}; go('quiz') }
+
 // ===== Quiz-engine =====
 let antw=null;
 function tekenVraag(){
   const v=Q.vragen[Q.i]; antw=null; Q.fase='vraag';
   if(v.t==='mc'&&!v._mix){ const ord=shuffle(v.o.map((_,i)=>i)); v._mix=ord }
-  const bol=Q.vragen.map((x,i)=>`<i class="${i<Q.res.length?(Q.modus==='toets'?'nu':(Q.res[i]?'g':'f')):(i===Q.i?'nu':'')}"></i>`).join('');
+  const bol=Q.vragen.map((x,i)=>`<i class="${i<Q.res.length?((Q.modus==='toets'||Q.geenFb)?'nu':(Q.res[i]?'g':'f')):(i===Q.i?'nu':'')}"></i>`).join('');
   let body='';
   if(v.t==='mc') body=`<div class="opties">${v._mix.map((oi,k)=>`<button class="optie" data-k="${oi}" onclick="kies(this,${oi})"><span class="l">${'ABCD'[k]}</span><span>${esc(v.o[oi])}</span></button>`).join('')}</div>`;
   else if(v.t==='ex') body=`${v.bron?`<div class="kaart" style="margin-bottom:12px;font-size:15px;white-space:pre-wrap">${esc(v.bron)}</div>`:''}<div class="opties">${v.o.map((o,k)=>`<button class="optie" data-k="${k}" onclick="kies(this,${k})"><span class="l">${'ABCDE'[k]}</span><span>${esc(o)}</span></button>`).join('')}</div>`;
   else if(v.t==='wo') body=`<div class="opties" style="grid-template-columns:1fr 1fr"><button class="optie" data-k="true" onclick="kies(this,true)"><span class="l">✔</span><span>Waar</span></button><button class="optie" data-k="false" onclick="kies(this,false)"><span class="l">✘</span><span>Niet waar</span></button></div>`;
   else if(v.t==='koppel'){ if(!v._r) v._r=shuffle([...new Set(v.p.map(p=>p[1]))]); antw=v.p.map(()=>'');
     body=`<div class="koppel">${v.p.map((p,i)=>`<b>${esc(p[0])}</b><select data-i="${i}" onchange="antw[${i}]=this.value;$('#ok').disabled=antw.some(x=>!x)"><option value="">Kies…</option>${v._r.map(r=>`<option>${esc(r)}</option>`).join('')}</select>`).join('')}</div>`; }
+  else if(v.t==='open'&&v.gaps){ antw=v.gaps.map(()=>-1);
+    body=`<div class="koppel">${v.gaps.map((g,i)=>`<b>(${g.n})</b><select data-i="${i}" onchange="antw[${i}]=+this.value;$('#ok').disabled=antw.some(x=>x<0)"><option value="-1">Kies…</option>${g.o.map((o,k)=>`<option value="${k}">${esc(o)}</option>`).join('')}</select>`).join('')}</div><p class="zacht" style="font-size:14px">Kies bij elk nummer het juiste woord.</p>`; }
+  else if(v.t==='open') body=`<textarea id="oIn" rows="5" style="width:100%;font:inherit;padding:10px;border-radius:12px;border:1px solid var(--lijn)" placeholder="Schrijf je antwoord op, zoals op het examen." oninput="antw=this.value"></textarea><p class="zacht" style="font-size:14px">Daarna zie je het antwoordmodel en geef je jezelf punten.${v.pnt?` Maximaal ${v.pnt} punt${v.pnt>1?'en':''}.`:''}</p>`;
   else if(v.t==='reken') body=`<div class="reken">${v.eh==='€'?'€':''}<input type="text" id="rIn" inputmode="decimal" autocomplete="off" oninput="antw=this.value;$('#ok').disabled=!this.value.trim()" onkeydown="if(event.key==='Enter'&&!$('#ok').disabled)controleer()">${v.eh==='%'?'%':''}</div><p class="zacht" style="font-size:14px">Gebruik een komma voor decimalen. ${v.eh==='€'?'Rond af op 2 decimalen.':'Rond af op 1 decimaal.'}</p>`;
   $('#qz').innerHTML=`<div class="top"><button class="terug" onclick="if(confirm('Stoppen? Deze ronde telt dan niet mee.'))${Q.terug.replace(/"/g,'&quot;')}">‹ Stop</button><h1 style="font-size:18px">${esc(Q.titel)}</h1><span class="chip">${Q.i+1} / ${Q.vragen.length}</span></div>
-   <div class="voortgang">${bol}</div><div class="kaart">${v.ctx?`<p class="zacht" style="margin-top:0;font-size:14px">${esc(v.ctx)}</p>`:''}<div class="vraag">${esc(v.q)}</div>${body}<div id="fb"></div>
+   <div class="voortgang">${bol}</div><div class="kaart">${v._steun?`<p class="chip" style="display:inline-block;margin:0 0 8px">➕ Extra oefenvraag</p>`:''}${v.ctx?`<div class="zacht vctx" style="margin-top:0;font-size:14px">${fmt(v.ctx)}</div>`:''}<div class="vraag${v.q.length>180||v.q.includes('\n')?' lang':''}">${v.q.includes('\n')||v.q.length>180?fmt(v.q,true):esc(v.q)}</div>${body}<div id="fb"></div>
    <div class="voet"><button class="knop" id="ok" disabled onclick="controleer()">Controleer</button></div></div>`;
   if(v.t==='reken') setTimeout(()=>$('#rIn')&&$('#rIn').focus(),50);
+  if(v.t==='open'&&!v.gaps) $('#ok').disabled=false, $('#ok').textContent='Toon antwoordmodel';
 }
 function kies(el,k){ if(Q.fase!=='vraag') return; document.querySelectorAll('.optie').forEach(x=>x.classList.remove('kies')); el.classList.add('kies'); antw=k; $('#ok').disabled=false }
 function juistTekst(v){
   if(v.t==='mc'||v.t==='ex') return v.o[v.a]; if(v.t==='wo') return v.a?'Waar':'Niet waar';
+  if(v.t==='open') return v.gaps?v.gaps.map(g=>`(${g.n}) ${g.o[g.a]}`).join(' · '):(v.model||'');
   if(v.t==='reken') return v.eh==='€'?eur(v.a):(nl1(v.a)+(v.eh==='%'?'%':'')); if(v.t==='koppel') return v.p.map(p=>p[0]+' → '+p[1]).join(' · ');
 }
+// open vraag: eerst het antwoordmodel tonen, dan punten toekennen.
+// Met deelscores vinkt de leerling per deelscore aan wat goed is; een rekenuitkomst die in het antwoord staat, vinkt de computer alvast aan.
+// Zonder deelscores kiest de leerling 0 t/m het maximum aantal punten.
 function controleer(){
-  if(Q.fase!=='vraag') return; const v=Q.vragen[Q.i]; const goed=nakijken(v,antw); Q.res.push(goed); const nk=registreer(v,goed); if(nk) Q.kaartGemeld=(Q.kaartGemeld||[]).concat(nk); Q.fase='fb';
-  const toets=Q.modus==='toets';
+  if(Q.fase!=='vraag') return; const v=Q.vragen[Q.i];
+  if(v.t==='open'&&v.gaps&&Array.isArray(antw)){ const keus=antw; const p=invulPunten(v,keus); antw={p,max:v.pnt||1}; v._pt=antw; v._keus=keus; Q.pt=(Q.pt||0)+p; Q.ptMax=(Q.ptMax||0)+(v.pnt||1);
+    if(!(Q.modus==='toets'||Q.geenFb)) document.querySelectorAll('.koppel select').forEach((x,i)=>{ x.classList.add(keus[i]===v.gaps[i].a?'goed':'fout'); x.disabled=true }); }
+  else if(v.t==='open'&&antw!==true&&antw!==false&&!(antw&&antw.max)){ Q.fase='zelf'; const tekst=String(antw||''); const i=$('#oIn'); if(i) i.readOnly=true;
+    const ds=v.pnt?deelscoresVan(v):null; let nakijk='';
+    if(ds){ nakijk=`<p style="margin:14px 0 6px"><b>Vink aan wat er in jouw antwoord goed is:</b></p><div class="deelscores">${ds.map((d,k)=>{ const g=uitkomstVan(d.t); const auto=bevatGetal(tekst,g);
+        return `<label class="deel"><input type="checkbox" data-p="${d.p}" ${auto?'checked':''} onchange="telDeel()"><span>${esc(d.t.replace(/^(Een juist antwoord bevat|Een juiste (berekening|uitleg|verklaring) is|Uit het antwoord moet blijken)( dat)?:?\s*/i,''))} <b class="zacht">(${d.p}p)</b>${auto?`<br><small class="auto">🤖 De computer vond ${esc(g)} in je antwoord</small>`:''}</span></label>` }).join('')}</div>
+        <div class="voet" style="justify-content:flex-start;align-items:center"><button class="knop" id="dsOk" onclick="geefPunten(telDeel())">Klaar met nakijken</button><span id="dsTot" class="zacht"></span></div>` }
+    else if(v.pnt>1){ nakijk=`<p style="margin:14px 0 6px"><b>Hoeveel punten geef je jezelf?</b></p><div class="voet" style="justify-content:flex-start;flex-wrap:wrap">${Array.from({length:v.pnt+1},(_,k)=>v.pnt-k).map(k=>`<button class="knop${k===v.pnt?'':' zacht'}" onclick="geefPunten(${k})">${k} punt${k===1?'':'en'}</button>`).join('')}</div>` }
+    else nakijk=`<p style="margin:14px 0 6px"><b>Kijk je antwoord na. Had je het goed?</b></p><div class="voet" style="justify-content:flex-start"><button class="knop" onclick="geefPunten(1)">✔ Goed</button><button class="knop zacht" onclick="geefPunten(0)">✘ Nog niet goed</button></div>`;
+    $('#fb').innerHTML=`<div class="fb"><b>Antwoordmodel</b>${v.pnt?` <span class="zacht">(${v.pnt} punt${v.pnt>1?'en':''})</span>`:''}<div style="margin-top:6px">${fmt(ds?String(v.model).split(/\n\s*Puntenverdeling:?/)[0]:v.model)}</div>${nakijk}</div>`;
+    if(ds) telDeel(); $('#ok').style.display='none'; return }
+  afronden(v);
+}
+function telDeel(){ let p=0; document.querySelectorAll('.deelscores input').forEach(x=>{ if(x.checked) p+=+x.dataset.p }); const t=$('#dsTot'); if(t) t.textContent=`${p} van ${Q.vragen[Q.i].pnt} punten`; return p }
+function geefPunten(p){ if(Q.fase!=='zelf') return; const v=Q.vragen[Q.i]; const max=v.pnt||1; antw={p,max}; v._pt=antw; Q.pt=(Q.pt||0)+p; Q.ptMax=(Q.ptMax||0)+max; Q.fase='vraag'; $('#ok').style.display=''; afronden(v) }
+function zelfOordeel(g){ geefPunten(g?(Q.vragen[Q.i].pnt||1):0) }
+function afronden(v){
+  const goed=nakijken(v,antw); Q.res.push(goed); const nk=registreer(v,goed); if(nk) Q.kaartGemeld=(Q.kaartGemeld||[]).concat(nk); Q.fase='fb';
+  const toets=Q.modus==='toets'||!!Q.geenFb;
   if(!toets){
     if(v.t==='mc'||v.t==='wo'||v.t==='ex') document.querySelectorAll('.optie').forEach(x=>{ const k=x.dataset.k; const isJ=String(v.a)===k; if(isJ) x.classList.add('goed'); else if(x.classList.contains('kies')) x.classList.add('fout') });
     if(v.t==='koppel') document.querySelectorAll('.koppel select').forEach(s=>{ s.classList.add(s.value===v.p[s.dataset.i][1]?'goed':'fout'); s.disabled=true });
     if(v.t==='reken'){ const i=$('#rIn'); i.classList.add(goed?'goed':'fout'); i.disabled=true }
+    if(v.t==='open') $('#fb').innerHTML=`<div class="fb ${goed?'goed':'fout'}"><b>${v._pt&&v._pt.max>1?`${v._pt.p} van ${v._pt.max} punten. `:''}${goed?'Mooi!':'Deze komt terug in je herhaalronde.'}</b><div style="margin-top:6px">${fmt(v.model)}</div>${v.u?'<br>'+esc(v.u):''}</div>`; else
     $('#fb').innerHTML=`<div class="fb ${goed?'goed':'fout'}"><b>${goed?pick(['Goed zo!','Klopt!','Top!','Helemaal goed!']):'Niet goed.'}</b> ${goed?'':'Het juiste antwoord: <b>'+esc(juistTekst(v))+'</b>. '}${v.u?'<br>'+esc(v.u):''}${nk?`<br>🃏 Nieuwe kaart: <b>${esc(v.b)}</b>`:''}</div>`;
   }
+  if(!goed) steunvraag(v);
   document.querySelectorAll('.optie').forEach(x=>x.disabled=true);
   const laatste=Q.i===Q.vragen.length-1; const ok=$('#ok'); ok.disabled=false; ok.textContent=laatste?'Bekijk resultaat':'Volgende'; ok.onclick=volgende;
   if(toets) volgende(); else bewaar();
@@ -303,7 +371,10 @@ function controleer(){
 function volgende(){ if(Q.i<Q.vragen.length-1){ Q.i++; tekenVraag() } else klaar() }
 
 function klaar(){
-  oefenActief=false; const n=Q.res.filter(Boolean).length, tot=Q.vragen.length; let extra='', titel='', icoon='🎉';
+  oefenActief=false; let n=Q.res.filter(Boolean).length, tot=Q.vragen.length; let extra='', titel='', icoon='🎉';
+  const nS=Q.vragen.filter(v=>v._steun).length;
+  if(nS){ n=Q.res.filter((g,i)=>g&&!Q.vragen[i]._steun).length; tot=tot-nS; const sg=Q.res.filter((g,i)=>g&&Q.vragen[i]._steun).length; extra+=`<p class="zacht">Extra oefenvragen: ${sg} van ${nS} goed.</p>` }
+  if(Q.ptMax) extra+=`<p>✍️ Open vragen: <b>${Q.pt} van ${Q.ptMax} punten</b></p>`;
   if(Q.modus==='level'){
     const oud=(S.lv[Q.lid]||{}).best; const r=S.lv[Q.lid]||{best:0,n:0}; r.n++; r.best=Math.max(r.best||0,n); r.laatst=n; S.lv[Q.lid]=r;
     const m=medaille(n), mOud=oud!=null?medaille(oud):null;
@@ -320,7 +391,7 @@ function klaar(){
   const fout=Q.vragen.filter((v,i)=>!Q.res[i]);
   app().innerHTML=`<div class="wrap" style="max-width:640px"><div class="kaart mid"><div class="groot">${icoon}</div><h2 style="margin:0 0 6px">${titel}</h2>${extra}
    <div class="voet" style="justify-content:center"><button class="knop zacht" onclick="${Q.terug.replace(/"/g,'&quot;')}">Terug</button>${Q.modus==='level'?`<button class="knop" onclick="startLevel('${Q.w}','${Q.lid}')">Nog een keer</button>`:''}</div></div>
-   ${fout.length?`<div class="sectie">Deze had je fout</div><div class="kaart">${fout.map(v=>`<div class="rij" style="display:block"><b>${esc(v.q)}</b><br><span class="zacht">Juist: ${esc(juistTekst(v))}</span></div>`).join('')}</div>`:''}</div>`;
+   ${fout.length?`<div class="sectie">Deze had je fout</div><div class="kaart">${fout.map(v=>`<div class="rij" style="display:block"><b>${esc(v.q.replace(/^► /gm,''))}</b><br>${v.t==='open'?`<details><summary class="zacht" style="cursor:pointer">Antwoordmodel</summary>${fmt(v.model)}</details>`:`<span class="zacht">Juist: ${esc(juistTekst(v))}</span>`}</div>`).join('')}</div>`:''}</div>`;
   scherm='resultaat'; nav();
 }
 function toetsUitslag(){
@@ -352,7 +423,7 @@ function samenvatLokaal(){ return samenvat(S) }
 function samenvat(s){ // zelfde berekening als op de server
   const dom={}; DOMEINEN.forEach(d=>{ const sc=Object.keys(EINDTERMEN).filter(k=>EINDTERMEN[k].d===d.id).map(k=>{const et=(s.et||{})[k]; if(!et||et.r.length<3) return null; let a=0,w=0; et.r.forEach((x,i)=>{a+=x*(i+1);w+=i+1}); return Math.round(a/w*100)}).filter(x=>x!==null); dom[d.id]=sc.length?Math.round(sc.reduce((a,b)=>a+b,0)/sc.length):null });
   const fout={}; Object.entries(s.vr||{}).forEach(([k,r])=>{ if(r.f) fout[k]=r.f });
-  return {id:s.id,naam:s.naam,klas:s.klas,code:s.code,laatst:s.upd,tijd:s.tijd||0,tijdWeek:(s.week||{})[weekId()]||0,xp:s.xp||0,lv:s.lv||{},toets:s.toets||{},dom,fout,et:s.et||{},vr:s.vr||{},week:s.week||{},dag:s.dag||{},nk:(s.kaarten||[]).length,badges:s.badges||[],sprint:s.sprint||null,herhaal:(s.herhaal||[]).length,aangemaakt:s.aangemaakt||0,munten:(s.mVerd||0)-(s.mUit||0)};
+  return {id:s.id,naam:s.naam,klas:s.klas,code:s.code,laatst:s.upd,tijd:s.tijd||0,tijdWeek:(s.week||{})[weekId()]||0,xp:s.xp||0,lv:s.lv||{},toets:s.toets||{},dom,fout,et:s.et||{},vr:s.vr||{},week:s.week||{},dag:s.dag||{},nk:(s.kaarten||[]).length,badges:s.badges||[],sprint:s.sprint||null,pt:s.pt||{},exr:s.exr||{},kv:s.kv||null,herhaal:(s.herhaal||[]).length,aangemaakt:s.aangemaakt||0,munten:(s.mVerd||0)-(s.mUit||0)};
 }
 async function laadDocent(){ const c=$('#dCode').value.trim(); try{ const j=await api('overzicht',{docentcode:c}); toonDocent(j) }catch(e){ melding(e.message,4000) } }
 let D=null, dKlas='alle', dSort='week';

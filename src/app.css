@@ -309,3 +309,6 @@ th{font:800 12px var(--kop);text-transform:uppercase;letter-spacing:.05em;color:
 .laag.m{background:color-mix(in srgb,var(--acc) 15%,transparent);color:var(--ink)}
 .laag.v{background:color-mix(in srgb,var(--zacht,#888) 18%,transparent);color:var(--ink)}
 .chip.laag{font-size:13px}
+/* top 5 examenonderwerpen */
+.t5balk{display:block;height:6px;border-radius:3px;background:var(--bg);margin:5px 0 3px;overflow:hidden}
+.t5balk i{display:block;height:100%;background:var(--acc);border-radius:3px}

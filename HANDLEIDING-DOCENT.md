@@ -13,6 +13,9 @@ Nergens in de app staan cijfers. Leerlingen zien alleen hoeveel ze goed hebben (
 
 **Leren (nieuw menu)**
 - **Slim oefenen**: de app kiest zelf vragen uit de zwakste onderwerpen. Bij een fout volgt soms een steunvraag.
+- **Top 5 examenonderwerpen**: de vijf onderwerpen die samen ruim de helft van de examenpunten opleveren (kosten en winst,
+  sparen en lenen, belang van het buitenland, betaalde en onbetaalde arbeid, werkloosheid). Per onderwerp 10 vragen
+  (half oefenvragen, half echte examenvragen) of een **Top 5 mix** van 15 vragen, waarin grote en zwakke onderwerpen vaker terugkomen.
 - **Flitskaarten**: begrippen met herhaling op slimme momenten (na 1, 3, 7, 14, 30 en 60 dagen).
 - **Foutenschrift**: alle fout gemaakte vragen per onderwerp, met uitleg.
 - **Formulekaart**: de 19 formules die mavo-leerlingen moeten kennen, met rekenregels.
@@ -45,7 +48,7 @@ Nergens in de app staan cijfers. Leerlingen zien alleen hoeveel ze goed hebben (
   en de examens op tijd.
 - **Klassikaal** (nieuw): de zwakste onderwerpen van de klas (met de namen van wie nog onder de 50 zit), de vragen die
   veel leerlingen fout hadden, de proeftoetsen (gemiddeld aantal goed), examens op tijd (punten), de oefenmodus per klas
-  en hoeveel procent van de kernbegrippen de klas al beheerst.
+  hoeveel procent van de kernbegrippen de klas al beheerst en de klasscore op de top 5 examenonderwerpen.
 - Vragen, Eindtermen en Examentrainer zoals voorheen.
 - Filter op Econ1 of Econ2, vernieuwen, CSV voor Excel en afdrukken.
 

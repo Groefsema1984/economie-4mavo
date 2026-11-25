@@ -32,7 +32,7 @@ function top5Vragen(e, n, m, al){
 function startTop5(e){
   const t=top5().find(x=>x.e===e); if(!t){ melding('Dit onderwerp is er niet'); return }
   const v=top5Vragen(e,5,5); if(v.length<4){ melding('Hier zijn nog te weinig vragen voor'); return }
-  Q={modus:'top5',titel:'Top 5 · '+EINDTERMEN[e].t,vragen:shuffle(v),i:0,res:[],terug:"go('top5')"}; go('quiz');
+  Q={modus:'top5',titel:'Top 5 · '+EINDTERMEN[e].t,vragen:shuffle(v),i:0,res:[],terug:top5Terug}; top5Terug="go('top5')"; go('quiz');
 }
 // Top 5 mix: 15 vragen. Een onderwerp dat meer examenpunten oplevert en waar je zwakker in bent, komt vaker terug.
 function top5Verdeling(tot){
@@ -48,21 +48,25 @@ function startTop5Mix(){
   const al=new Set(); let v=[];
   top5Verdeling(15).forEach(x=>{ const ex=Math.ceil(x.n/2); v=v.concat(top5Vragen(x.e,x.n-ex,ex,al)) });
   if(v.length<5){ melding('Hier zijn nog te weinig vragen voor'); return }
-  Q={modus:'top5',titel:'Top 5 mix',vragen:shuffle(v).slice(0,15),i:0,res:[],terug:"go('top5')"}; go('quiz');
+  Q={modus:'top5',titel:'Top 5 mix',vragen:shuffle(v).slice(0,15),i:0,res:[],terug:top5Terug}; top5Terug="go('top5')"; go('quiz');
 }
 
-SCHERMEN.top5 = function(){
-  const t=top5();
+// inhoud van het top 5-scherm; ook gebruikt als tab in de Eindexamentrainer (terug = waar de quiz daarna heen gaat)
+let top5Terug="go('top5')";
+function top5Inhoud(terug){
+  const t=top5(); const tg=JSON.stringify(terug||"go('top5')").replace(/"/g,'&quot;');
   const rij=x=>{ const s=etScore(x.e);
-    return `<button class="lv" onclick="startTop5('${x.e}')"><span class="med" style="font-size:20px;font-weight:800">${x.pct}%</span>
+    return `<button class="lv" onclick="top5Terug=${tg};startTop5('${x.e}')"><span class="med" style="font-size:20px;font-weight:800">${x.pct}%</span>
       <span style="flex:1"><b>${esc(EINDTERMEN[x.e].t)}</b>
        <span class="t5balk" title="${x.pct}% van de examenpunten"><i style="width:${Math.min(100,x.pct*4)}%"></i></span>
        <small>${x.pct}% van de examenpunten · jouw score: ${s==null?'nog niet genoeg geoefend':s+' van 100'} · tik voor 10 vragen</small></span><span class="zacht">›</span></button>` };
-  return `<div class="wrap" style="max-width:760px">${kop('Top 5 examenonderwerpen',"go('leren')")}
-   <div class="kaart" style="margin-bottom:10px"><p style="margin:0">Deze vijf onderwerpen leveren samen <b>${top5Totaal()}% van alle punten</b> op de eindexamens economie (2018-2026). Wie deze goed beheerst, heeft al meer dan de helft van het examen binnen.</p>
-    <div class="voet" style="justify-content:flex-start;margin:12px 0 0"><button class="knop" onclick="startTop5Mix()">🔥 Top 5 mix · 15 vragen</button></div>
+  return `<div class="kaart" style="margin-bottom:10px"><p style="margin:0">Deze vijf onderwerpen leveren samen <b>${top5Totaal()}% van alle punten</b> op de eindexamens economie (2018-2026). Wie deze goed beheerst, heeft al meer dan de helft van het examen binnen.</p>
+    <div class="voet" style="justify-content:flex-start;margin:12px 0 0"><button class="knop" onclick="top5Terug=${tg};startTop5Mix()">🔥 Top 5 mix · 15 vragen</button></div>
     <p class="zacht" style="font-size:14px;margin:8px 0 0">In de mix komen onderwerpen met meer examenpunten vaker terug, en ook de onderwerpen waar jij nog zwak in bent. De helft zijn echte examenvragen.</p></div>
-   <div class="kaart">${t.map(rij).join('')}</div></div>${VOET()}`;
+   <div class="kaart">${t.map(rij).join('')}</div>`;
+}
+SCHERMEN.top5 = function(){
+  return `<div class="wrap" style="max-width:760px">${kop('Top 5 examenonderwerpen',"go('leren')")}${top5Inhoud("go('top5')")}</div>${VOET()}`;
 };
 
 // tegel op het Leren-scherm, direct na Slim oefenen

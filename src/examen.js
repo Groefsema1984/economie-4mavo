@@ -13,12 +13,13 @@ let exTab='jaar';
 
 SCHERMEN.examen = function(){
   const tot=EXAMEN.vragen.length, ok=EXAMEN.vragen.filter(beheerst).length;
-  const tabs=[['jaar','Per examen'],['domein','Per domein'],['tijd','Examen op tijd'],['print','Printen']].map(([k,t])=>`<button class="knop ${exTab===k?'':'zacht'}" onclick="exTab='${k}';go('examen')">${t}</button>`).join('');
+  const tabs=[['jaar','Per examen'],['top5','🔥 Top 5 onderwerpen'],['domein','Per domein'],['tijd','Examen op tijd'],['print','Printen']].map(([k,t])=>`<button class="knop ${exTab===k?'':'zacht'}" onclick="exTab='${k}';go('examen')">${t}</button>`).join('');
   let inhoud='';
   if(exTab==='jaar') inhoud=`<div class="kaart">${exLijst().map(({c,v})=>{const b=v.filter(beheerst).length; return `<button class="lv" onclick="startExamen('${c}')"><span class="med">${b===v.length?'🏆':'📄'}</span><span style="flex:1"><b>Examen ${exNaam(c)}</b><small>${v.length} vragen (${v.filter(x=>x.t==='ex').length} meerkeuze) · ${b} beheerst</small><div class="balk" style="margin-top:6px"><i style="width:${Math.round(b/v.length*100)}%"></i></div></span><span class="zacht">›</span></button>`}).join('')}</div>`;
   else if(exTab==='domein') inhoud=`<div class="kaart">${DOMEINEN.filter(d=>d.id!=='rek').map(d=>{const v=EXAMEN.vragen.filter(x=>x.d===d.id); const b=v.filter(beheerst).length; return `<button class="lv" onclick="startExDomein('${d.id}')"><span class="med">${d.icoon}</span><span style="flex:1"><b>${d.naam}</b><small>${v.length} vragen · ${b} beheerst · 10 per ronde, je zwakke vragen eerst</small><div class="balk" style="margin-top:6px"><i style="width:${Math.round(b/v.length*100)}%;background:${d.kleur}"></i></div></span><span class="zacht">›</span></button>`}).join('')}
      <button class="lv" onclick="startExMix()"><span class="med">🎲</span><span style="flex:1"><b>Alles door elkaar</b><small>10 willekeurige examenvragen</small></span><span class="zacht">›</span></button></div>`;
   else if(exTab==='tijd') inhoud=exTijdLijst();
+  else if(exTab==='top5') inhoud=top5Inhoud("go('examen')");
   else inhoud=`<div class="kaart"><p style="margin-top:0">Kies wat je wilt printen. Je krijgt de vragen met de examenpagina's en bronnen, en met het vinkje ook de antwoorden en het antwoordmodel voor de docent.</p>
      <label class="label">Examen</label><select id="prSel"><option value="">Alle examens per domein…</option>${exLijst().map(({c,v})=>`<option value="${c}">Examen ${exNaam(c)} (${v.length} vragen)</option>`).join('')}</select>
      <label class="label">Of een domein</label><select id="prDom"><option value="">–</option>${DOMEINEN.filter(d=>d.id!=='rek').map(d=>`<option value="${d.id}">${d.naam}</option>`).join('')}</select>

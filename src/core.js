@@ -3,7 +3,7 @@
 const DATA_ENDPOINT_URL = "";
 const KLASSEN = ['Econ1','Econ2'];           // klassen waaruit leerlingen kiezen
 const KEY = 'eco4m-v1';                  // opslagsleutel op het apparaat
-const VERSIE = '2.0';
+const VERSIE = '2.1';
 const VRAGEN_PER_LEVEL = 8;
 const MEDAIL = [{n:'brons',e:'🥉',min:6,m:5},{n:'zilver',e:'🥈',min:7,m:10},{n:'goud',e:'🥇',min:8,m:20}];
 const TOETS_VRAGEN = 15;

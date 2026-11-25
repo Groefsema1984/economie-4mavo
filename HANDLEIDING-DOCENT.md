@@ -16,6 +16,7 @@ Nergens in de app staan cijfers. Leerlingen zien alleen hoeveel ze goed hebben (
 - **Top 5 examenonderwerpen**: de vijf onderwerpen die samen ruim de helft van de examenpunten opleveren (kosten en winst,
   sparen en lenen, belang van het buitenland, betaalde en onbetaalde arbeid, werkloosheid). Per onderwerp 10 vragen
   (half oefenvragen, half echte examenvragen) of een **Top 5 mix** van 15 vragen, waarin grote en zwakke onderwerpen vaker terugkomen.
+  Staat ook als tab in de Eindexamentrainer en als tegel op het startscherm.
 - **Flitskaarten**: begrippen met herhaling op slimme momenten (na 1, 3, 7, 14, 30 en 60 dagen).
 - **Foutenschrift**: alle fout gemaakte vragen per onderwerp, met uitleg.
 - **Formulekaart**: de 19 formules die mavo-leerlingen moeten kennen, met rekenregels.

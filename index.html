@@ -1449,7 +1449,7 @@ const EXAMEN = {vragen:[{"id":"ex.18-1.1","t":"ex","ex":"18-1","jaar":2018,"tv":
 const DATA_ENDPOINT_URL = "https://script.google.com/macros/s/AKfycbxgJkNOJC6Y3sOo8nEy5wdf-NCDowQw0l5HSCh9AX_7MA65MAY5JdkzpI47U47FMmFj/exec";
 const KLASSEN = ['Econ1','Econ2'];           // klassen waaruit leerlingen kiezen
 const KEY = 'eco4m-v1';                  // opslagsleutel op het apparaat
-const VERSIE = '2.0';
+const VERSIE = '2.1';
 const VRAGEN_PER_LEVEL = 8;
 const MEDAIL = [{n:'brons',e:'🥉',min:6,m:5},{n:'zilver',e:'🥈',min:7,m:10},{n:'goud',e:'🥇',min:8,m:20}];
 const TOETS_VRAGEN = 15;
@@ -1749,6 +1749,7 @@ home(){
     <div class="kaart"><h3 class="zijkop">Je uitdagingen</h3>
      ${exOpen?`<button class="uitdaging" onclick="go('examen')"><span class="thumb" style="${foto('examen',200)}"><span>🎓</span></span><span><b>Eindexamentrainer</b><small>${ok} van ${EXAMEN.vragen.length} examenvragen beheerst</small></span></button>
      <button class="uitdaging" onclick="startSprint()"><span class="thumb" style="${foto('sprint',200)}"><span>⚡</span></span><span><b>Examensprint</b><small>15 vragen tegen de klok · record ${(S.sprint||{}).best||0}</small></span></button>`:''}
+     <button class="uitdaging" onclick="go('top5')"><span class="thumb" style="${foto('examen',200)}"><span>🔥</span></span><span><b>Top 5 examenonderwerpen</b><small>Samen ${top5Totaal()}% van het examen · oefen ze apart of als mix</small></span></button>
      <button class="uitdaging" onclick="startSlim()"><span class="thumb" style="${foto('vaardig',200)}"><span>🎯</span></span><span><b>Slim oefenen</b><small>Extra vragen over je zwakste onderwerpen</small></span></button>
      <button class="uitdaging" onclick="go('flits')"><span class="thumb" style="${foto('collectie',200)}"><span>🃏</span></span><span><b>Flitskaarten</b><small>${(()=>{const n=fkDue().length; return n?n+' begrippen om nu te herhalen':'Leer de begrippen met herhaling op afstand'})()}</small></span></button>
      <button class="uitdaging" onclick="go('herhaal')"><span class="thumb" style="${foto('herhaal',200)}"><span>🔁</span></span><span><b>Herhaalronde</b><small>${nh?nh+' vragen om opnieuw te doen':'Geen foute vragen, goed bezig!'}</small></span></button>
@@ -2124,12 +2125,13 @@ let exTab='jaar';
 
 SCHERMEN.examen = function(){
   const tot=EXAMEN.vragen.length, ok=EXAMEN.vragen.filter(beheerst).length;
-  const tabs=[['jaar','Per examen'],['domein','Per domein'],['tijd','Examen op tijd'],['print','Printen']].map(([k,t])=>`<button class="knop ${exTab===k?'':'zacht'}" onclick="exTab='${k}';go('examen')">${t}</button>`).join('');
+  const tabs=[['jaar','Per examen'],['top5','🔥 Top 5 onderwerpen'],['domein','Per domein'],['tijd','Examen op tijd'],['print','Printen']].map(([k,t])=>`<button class="knop ${exTab===k?'':'zacht'}" onclick="exTab='${k}';go('examen')">${t}</button>`).join('');
   let inhoud='';
   if(exTab==='jaar') inhoud=`<div class="kaart">${exLijst().map(({c,v})=>{const b=v.filter(beheerst).length; return `<button class="lv" onclick="startExamen('${c}')"><span class="med">${b===v.length?'🏆':'📄'}</span><span style="flex:1"><b>Examen ${exNaam(c)}</b><small>${v.length} vragen (${v.filter(x=>x.t==='ex').length} meerkeuze) · ${b} beheerst</small><div class="balk" style="margin-top:6px"><i style="width:${Math.round(b/v.length*100)}%"></i></div></span><span class="zacht">›</span></button>`}).join('')}</div>`;
   else if(exTab==='domein') inhoud=`<div class="kaart">${DOMEINEN.filter(d=>d.id!=='rek').map(d=>{const v=EXAMEN.vragen.filter(x=>x.d===d.id); const b=v.filter(beheerst).length; return `<button class="lv" onclick="startExDomein('${d.id}')"><span class="med">${d.icoon}</span><span style="flex:1"><b>${d.naam}</b><small>${v.length} vragen · ${b} beheerst · 10 per ronde, je zwakke vragen eerst</small><div class="balk" style="margin-top:6px"><i style="width:${Math.round(b/v.length*100)}%;background:${d.kleur}"></i></div></span><span class="zacht">›</span></button>`}).join('')}
      <button class="lv" onclick="startExMix()"><span class="med">🎲</span><span style="flex:1"><b>Alles door elkaar</b><small>10 willekeurige examenvragen</small></span><span class="zacht">›</span></button></div>`;
   else if(exTab==='tijd') inhoud=exTijdLijst();
+  else if(exTab==='top5') inhoud=top5Inhoud("go('examen')");
   else inhoud=`<div class="kaart"><p style="margin-top:0">Kies wat je wilt printen. Je krijgt de vragen met de examenpagina's en bronnen, en met het vinkje ook de antwoorden en het antwoordmodel voor de docent.</p>
      <label class="label">Examen</label><select id="prSel"><option value="">Alle examens per domein…</option>${exLijst().map(({c,v})=>`<option value="${c}">Examen ${exNaam(c)} (${v.length} vragen)</option>`).join('')}</select>
      <label class="label">Of een domein</label><select id="prDom"><option value="">–</option>${DOMEINEN.filter(d=>d.id!=='rek').map(d=>`<option value="${d.id}">${d.naam}</option>`).join('')}</select>
@@ -2949,7 +2951,7 @@ function top5Vragen(e, n, m, al){
 function startTop5(e){
   const t=top5().find(x=>x.e===e); if(!t){ melding('Dit onderwerp is er niet'); return }
   const v=top5Vragen(e,5,5); if(v.length<4){ melding('Hier zijn nog te weinig vragen voor'); return }
-  Q={modus:'top5',titel:'Top 5 · '+EINDTERMEN[e].t,vragen:shuffle(v),i:0,res:[],terug:"go('top5')"}; go('quiz');
+  Q={modus:'top5',titel:'Top 5 · '+EINDTERMEN[e].t,vragen:shuffle(v),i:0,res:[],terug:top5Terug}; top5Terug="go('top5')"; go('quiz');
 }
 // Top 5 mix: 15 vragen. Een onderwerp dat meer examenpunten oplevert en waar je zwakker in bent, komt vaker terug.
 function top5Verdeling(tot){
@@ -2965,21 +2967,25 @@ function startTop5Mix(){
   const al=new Set(); let v=[];
   top5Verdeling(15).forEach(x=>{ const ex=Math.ceil(x.n/2); v=v.concat(top5Vragen(x.e,x.n-ex,ex,al)) });
   if(v.length<5){ melding('Hier zijn nog te weinig vragen voor'); return }
-  Q={modus:'top5',titel:'Top 5 mix',vragen:shuffle(v).slice(0,15),i:0,res:[],terug:"go('top5')"}; go('quiz');
+  Q={modus:'top5',titel:'Top 5 mix',vragen:shuffle(v).slice(0,15),i:0,res:[],terug:top5Terug}; top5Terug="go('top5')"; go('quiz');
 }
 
-SCHERMEN.top5 = function(){
-  const t=top5();
+// inhoud van het top 5-scherm; ook gebruikt als tab in de Eindexamentrainer (terug = waar de quiz daarna heen gaat)
+let top5Terug="go('top5')";
+function top5Inhoud(terug){
+  const t=top5(); const tg=JSON.stringify(terug||"go('top5')").replace(/"/g,'&quot;');
   const rij=x=>{ const s=etScore(x.e);
-    return `<button class="lv" onclick="startTop5('${x.e}')"><span class="med" style="font-size:20px;font-weight:800">${x.pct}%</span>
+    return `<button class="lv" onclick="top5Terug=${tg};startTop5('${x.e}')"><span class="med" style="font-size:20px;font-weight:800">${x.pct}%</span>
       <span style="flex:1"><b>${esc(EINDTERMEN[x.e].t)}</b>
        <span class="t5balk" title="${x.pct}% van de examenpunten"><i style="width:${Math.min(100,x.pct*4)}%"></i></span>
        <small>${x.pct}% van de examenpunten · jouw score: ${s==null?'nog niet genoeg geoefend':s+' van 100'} · tik voor 10 vragen</small></span><span class="zacht">›</span></button>` };
-  return `<div class="wrap" style="max-width:760px">${kop('Top 5 examenonderwerpen',"go('leren')")}
-   <div class="kaart" style="margin-bottom:10px"><p style="margin:0">Deze vijf onderwerpen leveren samen <b>${top5Totaal()}% van alle punten</b> op de eindexamens economie (2018-2026). Wie deze goed beheerst, heeft al meer dan de helft van het examen binnen.</p>
-    <div class="voet" style="justify-content:flex-start;margin:12px 0 0"><button class="knop" onclick="startTop5Mix()">🔥 Top 5 mix · 15 vragen</button></div>
+  return `<div class="kaart" style="margin-bottom:10px"><p style="margin:0">Deze vijf onderwerpen leveren samen <b>${top5Totaal()}% van alle punten</b> op de eindexamens economie (2018-2026). Wie deze goed beheerst, heeft al meer dan de helft van het examen binnen.</p>
+    <div class="voet" style="justify-content:flex-start;margin:12px 0 0"><button class="knop" onclick="top5Terug=${tg};startTop5Mix()">🔥 Top 5 mix · 15 vragen</button></div>
     <p class="zacht" style="font-size:14px;margin:8px 0 0">In de mix komen onderwerpen met meer examenpunten vaker terug, en ook de onderwerpen waar jij nog zwak in bent. De helft zijn echte examenvragen.</p></div>
-   <div class="kaart">${t.map(rij).join('')}</div></div>${VOET()}`;
+   <div class="kaart">${t.map(rij).join('')}</div>`;
+}
+SCHERMEN.top5 = function(){
+  return `<div class="wrap" style="max-width:760px">${kop('Top 5 examenonderwerpen',"go('leren')")}${top5Inhoud("go('top5')")}</div>${VOET()}`;
 };
 
 // tegel op het Leren-scherm, direct na Slim oefenen

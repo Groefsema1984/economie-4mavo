@@ -31,8 +31,8 @@ function wereldStand(w){
   for(const l of lvs){ const r=S.lv[l.id]; if(r&&r.best>=MEDAIL[0].min) brons++; if(r) punten+=r.best }
   return {klaar:echte.filter(l=>(S.lv[l.id]||{}).best>=MEDAIL[0].min).length, totaal:echte.length, pct:Math.round(lvs.reduce((s,l)=>s+Math.min((S.lv[l.id]||{}).best||0,VRAGEN_PER_LEVEL),0)/(lvs.length*VRAGEN_PER_LEVEL)*100), diploma:!!(S.toets[w]&&S.toets[w].klaar)};
 }
-function levelOpen(w,i){ const lvs=LEVELS[w]; const l=lvs[i]; if(l.id.endsWith('.r')) return true; if(i===0) return true; const vorige=lvs[i-1]; return ((S.lv[vorige.id]||{}).best||0)>=MEDAIL[0].min }
-function toetsOpen(w){ return LEVELS[w].filter(l=>l.vragen.length).every(l=>((S.lv[l.id]||{}).best||0)>=MEDAIL[0].min) }
+function levelOpen(w,i){ if(S&&S.alles) return true; const lvs=LEVELS[w]; const l=lvs[i]; if(l.id.endsWith('.r')) return true; if(i===0) return true; const vorige=lvs[i-1]; return ((S.lv[vorige.id]||{}).best||0)>=MEDAIL[0].min }
+function toetsOpen(w){ if(S&&S.alles) return true; return LEVELS[w].filter(l=>l.vragen.length).every(l=>((S.lv[l.id]||{}).best||0)>=MEDAIL[0].min) }
 
 const SCHERMEN = {
 welkom(){
